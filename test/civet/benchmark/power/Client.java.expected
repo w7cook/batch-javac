@@ -1,0 +1,16 @@
+package benchmark.power;
+
+public class Client {
+    
+    public Client() {
+        super();
+    }
+    
+    public static int x(Power pm, Power pa, int base) {
+        return pa.raise(pm.raise(base));
+    }
+    
+    public static int x$1002(int base) {
+        return benchmark.power.Power.raise$1005(benchmark.power.Power.raise$1003(base));
+    }
+}

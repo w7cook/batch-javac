@@ -1,0 +1,26 @@
+package benchmark.arith_int;
+
+public class Var extends Exp {
+    int v;
+    
+    Var(int i) {
+        super();
+        v = i;
+    }
+    
+    int eval(int[] env) {
+        return env[v];
+    }
+    
+    static int eval$1007(int[] env) {
+        return env[0];
+    }
+    
+    static int eval$1013(int[] env) {
+        return env[1];
+    }
+    
+    static int eval$1014(int[] env) {
+        return env[2];
+    }
+}

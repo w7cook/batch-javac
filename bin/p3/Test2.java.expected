@@ -1,0 +1,18 @@
+package p3;
+
+import org.civet.Civet;
+import org.civet.Civet.Compile;
+
+public class Test2 {
+    
+    public Test2() {
+        super();
+    }
+    
+    @Compile()
+    public static void main(String[] args) {
+        System.out.println("Circle(0; )");
+        System.out.println("Circle(0; (100.0, 200.0))");
+        System.out.println("Circle(12; (100.0, 200.0))");
+    }
+}

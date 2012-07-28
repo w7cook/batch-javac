@@ -1,0 +1,18 @@
+package p1;
+
+public class NTimes {
+    private int n;
+    
+    public NTimes(int n) {
+        super();
+        this.n = n;
+    }
+    
+    public double apply(double x) {
+        return Mult.mult(x, n);
+    }
+    
+    public static double apply$1001(double x) {
+        return p1.Mult.mult$1002(x);
+    }
+}

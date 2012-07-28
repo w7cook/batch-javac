@@ -1,0 +1,12 @@
+package benchmark.arith_int;
+
+public class Exp {
+    
+    public Exp() {
+        super();
+    }
+    
+    int eval(int[] env) {
+        return this.eval(env);
+    }
+}

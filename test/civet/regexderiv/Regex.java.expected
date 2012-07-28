@@ -1,0 +1,712 @@
+package regexderiv;
+
+import java.util.HashSet;
+import java.util.Set;
+import org.civet.Civet;
+import org.civet.Civet.Compile;
+
+public abstract class Regex {
+    
+    public Regex() {
+        super();
+    }
+    
+    int run(State current) {
+        System.out.println(current.label);
+        String input = "";
+        for (Trans t : current.trans) if (t.event == input) return run(t.to);
+        return run(current);
+    }
+    
+    class State {
+        
+        State() {
+            super();
+        }
+        String label;
+        Trans[] trans;
+    }
+    
+    class Trans {
+        
+        Trans() {
+            super();
+        }
+        String event;
+        State to;
+    }
+    
+    @Compile()
+    public static void main(String[] args) {
+        String in = args[0];
+        boolean matched = regexderiv.Regex.match$1001(in);
+        System.out.println(matched);
+    }
+    
+    static boolean match(Regex e, String input) {
+        if (input.length() == 0) return e.canBeEmpty();
+        Character c = input.charAt(0);
+        for (Character ce : e.first()) if (c.equals(ce)) return match(e.derivative(ce), input.substring(1));
+        return false;
+    }
+    
+    public abstract Regex derivative(Character c);
+    
+    public abstract boolean canBeEmpty();
+    
+    public Set<Character> first() {
+        if (!computedFirstSet) {
+            computeFirstSet();
+            computedFirstSet = true;
+        }
+        return firstSet;
+    }
+    private boolean computedFirstSet = false;
+    protected Set<Character> firstSet = new HashSet<Character>();
+    
+    protected abstract void computeFirstSet();
+    
+    public static boolean match2(Regex e, String input) {
+        for (char c : input.toCharArray()) for (char candidate : e.first()) if (c == candidate) e = e.derivative(candidate);
+        return e.canBeEmpty();
+    }
+    
+    public boolean equals(Object obj) {
+        return this.simplify().eq(((Regex)obj).simplify());
+    }
+    
+    public abstract int hashCode();
+    
+    protected abstract boolean eq(Regex r1);
+    
+    static Regex seq(Regex r1, Regex r2) {
+        return Seq.create(r1, r2);
+    }
+    
+    static Regex fromString(String s) {
+        if (s.length() == 1) return lit(s.charAt(0)); else return seq(lit(s.charAt(0)), fromString(s.substring(1)));
+    }
+    
+    static Regex seq(Character c1, Character c2) {
+        return seq(lit(c1), lit(c2));
+    }
+    
+    static Regex seq(Regex r1, Character c2) {
+        return seq(r1, lit(c2));
+    }
+    
+    static Regex seq(Character c1, Regex r2) {
+        return seq(lit(c1), r2);
+    }
+    
+    static Regex alt(Regex r1, Regex r2) {
+        return Alt.create(r1, r2);
+    }
+    
+    static Regex alt(Character c1, Character c2) {
+        return alt(lit(c1), lit(c2));
+    }
+    
+    static Regex alt(Regex r1, Character c2) {
+        return alt(r1, lit(c2));
+    }
+    
+    static Regex alt(Character c1, Regex r2) {
+        return alt(lit(c1), r2);
+    }
+    
+    static Star star(Regex r1) {
+        return new Star(r1);
+    }
+    
+    static Star star(Character c) {
+        return star(lit(c));
+    }
+    
+    static Lit lit(char c) {
+        return new Lit(c);
+    }
+    
+    public abstract Regex simplify();
+    
+    static boolean match$1003(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1002(java.lang.String input) {
+        if (input.length() == 0) return false;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1001(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+}
+class Alt extends Regex {
+    private Regex re1;
+    private Regex re2;
+    
+    private Alt(Regex re1, Regex re2) {
+        super();
+        if (re1.hashCode() < re2.hashCode()) {
+            this.re1 = re1;
+            this.re2 = re2;
+        } else {
+            this.re1 = re2;
+            this.re2 = re1;
+        }
+    }
+    
+    public Regex seqr(Regex r) {
+        return Alt.create(Seq.create(re1, r), Seq.create(re2, r));
+    }
+    
+    public Regex seql(Regex r) {
+        return Alt.create(Seq.create(r, re1), Seq.create(r, re2));
+    }
+    
+    public static Regex create(Regex r1, Regex r2) {
+        if (r1 instanceof Empty && r2 instanceof Empty) return new Empty();
+        if (r1 instanceof Null && r2 instanceof Null) return new Null();
+        if (r1 instanceof Alt && r2 instanceof Alt) {
+            boolean remove1 = false;
+            boolean remove2 = false;
+            if (((Alt)r1).re1.equals(((Alt)r2).re1) || ((Alt)r1).re1.equals(((Alt)r2).re2)) remove1 = true;
+            if (((Alt)r1).re2.equals(((Alt)r2).re1) || ((Alt)r1).re2.equals(((Alt)r2).re2)) remove2 = true;
+            if (remove1 && remove2) return r2;
+            if (remove1) return Alt.create(((Alt)r1).re2, r2);
+            if (remove2) return Alt.create(((Alt)r1).re1, r2);
+        } else if (r1 instanceof Alt) {
+            if (((Alt)r1).re1.equals(r2) || ((Alt)r1).re2.equals(r2)) return r1;
+        } else if (r2 instanceof Alt) {
+            if (((Alt)r2).re1.equals(r1) || ((Alt)r2).re2.equals(r1)) return r2;
+        }
+        return new Alt(r1, r2);
+    }
+    
+    @Override()
+    public Regex derivative(Character c) {
+        return Alt.create(re1.derivative(c), re2.derivative(c));
+    }
+    
+    @Override()
+    public boolean canBeEmpty() {
+        return re1.canBeEmpty() || re2.canBeEmpty();
+    }
+    
+    @Override()
+    protected void computeFirstSet() {
+        firstSet.addAll(re1.first());
+        firstSet.addAll(re2.first());
+    }
+    
+    @Override()
+    public String toString() {
+        return "Alt [" + re1 + ", " + re2 + "]";
+    }
+    
+    @Override()
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((re1 == null) ? 0 : re1.hashCode());
+        result = prime * result + ((re2 == null) ? 0 : re2.hashCode());
+        return result;
+    }
+    
+    @Override()
+    public Regex simplify() {
+        Regex tre1 = re1.simplify();
+        Regex tre2 = re2.simplify();
+        if (tre1 instanceof Empty && tre2 instanceof Empty) return new Empty();
+        if (tre1 instanceof Null && tre2 instanceof Null) return new Null();
+        if (tre1.hashCode() < tre2.hashCode()) {
+            this.re1 = tre1;
+            this.re2 = tre2;
+        } else {
+            this.re1 = tre2;
+            this.re2 = tre1;
+        }
+        return this;
+    }
+    
+    @Override()
+    public boolean eq(Regex obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Alt other = (Alt)obj;
+        if (re1 == null) {
+            if (other.re1 != null) return false;
+        } else if (!re1.equals(other.re1)) return false;
+        if (re2 == null) {
+            if (other.re2 != null) return false;
+        } else if (!re2.equals(other.re2)) return false;
+        return true;
+    }
+    
+    static boolean match$1003(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1002(java.lang.String input) {
+        if (input.length() == 0) return false;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1001(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+}
+class Empty extends Regex {
+    
+    Empty() {
+        super();
+    }
+    
+    @Override()
+    public Regex derivative(Character c) {
+        return new Null();
+    }
+    
+    @Override()
+    public boolean canBeEmpty() {
+        return true;
+    }
+    
+    @Override()
+    protected void computeFirstSet() {
+    }
+    
+    @Override()
+    public String toString() {
+        return "Empty []";
+    }
+    
+    @Override()
+    public Regex simplify() {
+        return this;
+    }
+    
+    @Override()
+    public boolean eq(Regex obj) {
+        return (obj != null && obj instanceof Empty);
+    }
+    
+    @Override()
+    public int hashCode() {
+        return -818179187;
+    }
+    
+    static boolean match$1003(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1002(java.lang.String input) {
+        if (input.length() == 0) return false;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1001(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+}
+class Lit extends Regex {
+    private Character c;
+    
+    public Lit(Character c) {
+        super();
+        this.c = c;
+    }
+    
+    @Override()
+    public Regex derivative(Character c) {
+        if (this.c.equals(c)) return new Empty();
+        return new Null();
+    }
+    
+    @Override()
+    public boolean canBeEmpty() {
+        return false;
+    }
+    
+    @Override()
+    protected void computeFirstSet() {
+        firstSet.add(this.c);
+    }
+    
+    @Override()
+    public String toString() {
+        return "Lit [c=" + c + "]";
+    }
+    
+    @Override()
+    public Regex simplify() {
+        return this;
+    }
+    
+    @Override()
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((c == null) ? 0 : c.hashCode());
+        return result;
+    }
+    
+    @Override()
+    public boolean eq(Regex obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Lit other = (Lit)obj;
+        if (c == null) {
+            if (other.c != null) return false;
+        } else if (!c.equals(other.c)) return false;
+        return true;
+    }
+    
+    static boolean match$1003(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1002(java.lang.String input) {
+        if (input.length() == 0) return false;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1001(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+}
+class Null extends Regex {
+    
+    Null() {
+        super();
+    }
+    
+    @Override()
+    public Regex derivative(Character c) {
+        return new Null();
+    }
+    
+    @Override()
+    public boolean canBeEmpty() {
+        return false;
+    }
+    
+    @Override()
+    protected void computeFirstSet() {
+    }
+    
+    @Override()
+    public String toString() {
+        return "Null []";
+    }
+    
+    @Override()
+    public Regex simplify() {
+        return this;
+    }
+    
+    @Override()
+    public boolean eq(Regex obj) {
+        return (obj != null && obj instanceof Null);
+    }
+    
+    @Override()
+    public int hashCode() {
+        return 1871818761;
+    }
+    
+    static boolean match$1003(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1002(java.lang.String input) {
+        if (input.length() == 0) return false;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1001(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+}
+class Seq extends Regex {
+    private Regex re1;
+    private Regex re2;
+    
+    private Seq(Regex re1, Regex re2) {
+        super();
+        this.re1 = re1;
+        this.re2 = re2;
+    }
+    
+    @Override()
+    public Regex derivative(Character c) {
+        if (re1 instanceof Empty) return re2.derivative(c);
+        if (re2 instanceof Empty) return re1.derivative(c);
+        Regex x = Seq.create(re1.derivative(c), re2);
+        if (re1.canBeEmpty()) {
+            return Alt.create(x, re2.derivative(c));
+        } else {
+            return x;
+        }
+    }
+    
+    @Override()
+    public boolean canBeEmpty() {
+        return re1.canBeEmpty() && re2.canBeEmpty();
+    }
+    
+    @Override()
+    protected void computeFirstSet() {
+        firstSet.addAll(re1.first());
+        if (re1.canBeEmpty()) {
+            firstSet.addAll(re2.first());
+        }
+    }
+    
+    @Override()
+    public String toString() {
+        return "Seq [" + re1 + ", " + re2 + "]";
+    }
+    
+    @Override()
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((re1 == null) ? 0 : re1.hashCode());
+        result = prime * result + ((re2 == null) ? 0 : re2.hashCode());
+        return result;
+    }
+    
+    @Override()
+    public Regex simplify() {
+        Regex sre1 = re1.simplify();
+        Regex sre2 = re2.simplify();
+        return create(sre1, sre2);
+    }
+    
+    public static Regex create(Regex r1, Regex r2) {
+        if (r1 instanceof Null || r2 instanceof Null) return new Null();
+        if (r1 instanceof Empty) return r2;
+        if (r2 instanceof Empty) return r1;
+        if (r1 instanceof Alt) {
+            return ((Alt)r1).seqr(r2);
+        }
+        if (r2 instanceof Alt) {
+            return ((Alt)r2).seql(r1);
+        }
+        return new Seq(r1, r2);
+    }
+    
+    @Override()
+    public boolean eq(Regex obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Seq other = (Seq)obj;
+        if (re1 == null) {
+            if (other.re1 != null) return false;
+        } else if (!re1.equals(other.re1)) return false;
+        if (re2 == null) {
+            if (other.re2 != null) return false;
+        } else if (!re2.equals(other.re2)) return false;
+        return true;
+    }
+    
+    static boolean match$1003(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1002(java.lang.String input) {
+        if (input.length() == 0) return false;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1001(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+}
+class Star extends Regex {
+    private Regex re;
+    
+    public Star(Regex re) {
+        super();
+        this.re = re;
+    }
+    
+    @Override()
+    public Regex derivative(Character c) {
+        if (re instanceof Empty) return re.derivative(c);
+        return Seq.create(re.derivative(c), this);
+    }
+    
+    @Override()
+    public boolean canBeEmpty() {
+        return true;
+    }
+    
+    @Override()
+    protected void computeFirstSet() {
+        firstSet.addAll(re.first());
+    }
+    
+    @Override()
+    public String toString() {
+        return "Star [" + re + "]";
+    }
+    
+    @Override()
+    public Regex simplify() {
+        if (re instanceof Empty) return new Empty();
+        this.re = re.simplify();
+        if (re instanceof Empty) return new Empty();
+        return this;
+    }
+    
+    @Override()
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((re == null) ? 0 : re.hashCode());
+        return result;
+    }
+    
+    @Override()
+    public boolean eq(Regex obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
+        Star other = (Star)obj;
+        if (re == null) {
+            if (other.re != null) return false;
+        } else if (!re.equals(other.re)) return false;
+        return true;
+    }
+    
+    static boolean match$1003(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1002(java.lang.String input) {
+        if (input.length() == 0) return false;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+    
+    static boolean match$1001(java.lang.String input) {
+        if (input.length() == 0) return true;
+        Character c = input.charAt(0);
+        {
+            if (c.equals('b')) return regexderiv.Regex.match$1002(input.substring(1));
+            if (c.equals('a')) return regexderiv.Regex.match$1003(input.substring(1));
+        }
+        return false;
+    }
+}

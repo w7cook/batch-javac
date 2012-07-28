@@ -1,0 +1,21 @@
+import org.civet.Civet.Compile;
+
+public class TestFullName {
+    
+    public TestFullName() {
+        super();
+    }
+    
+    @Compile()
+    public static void main(String[] args) {
+        TestFullName.test$1001(new java.io.BufferedReader(new java.io.InputStreamReader(System.in)));
+    }
+    
+    static void test(int ct, java.io.BufferedReader bufferedReader) {
+        System.out.println(org.civet.Civet.RT(ct));
+    }
+    
+    static void test$1001(java.io.BufferedReader bufferedReader) {
+        System.out.println(10);
+    }
+}

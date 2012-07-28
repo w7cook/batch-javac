@@ -1,0 +1,19 @@
+
+import org.civet.Civet;
+import org.civet.Civet.Compile;
+
+public class TestLocal {
+    
+    public TestLocal() {
+        super();
+    }
+    
+    @Compile()
+    public static void main(String[] args) {
+        float s;
+        s = 0.0F;
+        s = 0.0F;
+        System.out.println(s);
+        System.out.println("0>>>>");
+    }
+}

@@ -1,0 +1,22 @@
+package benchmark.arith_int;
+
+public class Constant extends Exp {
+    int c;
+    
+    Constant(int i) {
+        super();
+        c = i;
+    }
+    
+    int eval(int[] env) {
+        return c;
+    }
+    
+    static int eval$1008(int[] env) {
+        return -2;
+    }
+    
+    static int eval$1011(int[] env) {
+        return 4;
+    }
+}
