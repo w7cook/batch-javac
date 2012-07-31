@@ -1,5 +1,0 @@
-build/**/*
-dist/**/*
-bin/**/*
-nbproject/private/
-build/ant-diagnostics.log
