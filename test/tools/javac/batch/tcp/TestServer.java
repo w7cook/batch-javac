@@ -39,6 +39,7 @@ public class TestServer {
 		EvalService<BasicInterface> handler = new EvalService<BasicInterface>(root);
 		TCPServer<Evaluate, BasicInterface> server = new TCPServer<Evaluate, BasicInterface>(
 				handler, new ServerSocket(port), transport, new batch.syntax.Eval());
+		server.debug = true;
 		server.start();
 	}
 

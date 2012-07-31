@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import batch.Service;
 import batch.json.JSONTransport;
 import batch.tcp.TCPClient;
 import batch.util.BatchTransport;
@@ -70,7 +71,20 @@ public class SimpleTCP {
 			fos.write(buffer);
 			fos.close();
 		}
-
+		
+		listFiles(service);
+		
 	}
+
+	static void listFiles(TCPClient<BasicInterface> dirServer) {
+    for (BasicInterface root : dirServer) {
+      java.io.File dir = root.getDir();
+      System.out.println("Large files in " + dir.getName());
+      for (java.io.File file : dir.listFiles())
+        if (file.length() > 1000) {
+          System.out.println(file.getPath());
+        }
+    }
+  }
 
 }

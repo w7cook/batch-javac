@@ -24,6 +24,7 @@
  ******************************************************************************/
 package eval;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -45,5 +46,9 @@ public class BasicObj extends BasicInterface {
 		fis.read(buffer);
 		return buffer;
 	}
+  @Override
+  public File getDir() {
+    return new java.io.File("..");
+  }
 }
 
