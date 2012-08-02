@@ -32,7 +32,7 @@ import com.sun.tools.javac.tree.JCTree.JCStatement;
 public abstract class Generator implements ExtraInfo<Generator> {
   Object extraInfo;
 
-  public Generator setExtraInfo(Object info) {
+  public Generator setExtra(Object info) {
     extraInfo = info;
     return this;
   }

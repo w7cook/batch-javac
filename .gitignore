@@ -1,5 +1,5 @@
-build/**/*
-dist/**/*
-bin/**/*
+/build
+/dist
+/bin
 nbproject/private/
 build/ant-diagnostics.log

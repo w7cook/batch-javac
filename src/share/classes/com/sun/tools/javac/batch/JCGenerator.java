@@ -692,4 +692,9 @@ public class JCGenerator extends PartitionFactoryHelper<Generator> {
     throw new Error("NOT IMPLEMENTED");
   }
 
+  @Override
+  public Generator setExtra(Generator exp, Object info) {
+    return exp.setExtra(info);
+  }
+
 }

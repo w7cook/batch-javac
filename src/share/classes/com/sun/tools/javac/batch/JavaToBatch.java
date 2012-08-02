@@ -197,7 +197,7 @@ public class JavaToBatch implements
         args.add(process(node.getArguments().get(i), DefaultContext));
       PExpr call = CodeModel.factory.DynamicCall(baseExp != null ? baseExp
           : CodeModel.factory.Other(null), methodNameString, args);
-      call.setExtraInfo(getMethodInfo(methSym));
+      call.setExtra(getMethodInfo(methSym));
 
       return checkMobile(inv.type, call);
     } else if (baseExp != null) {
@@ -205,7 +205,7 @@ public class JavaToBatch implements
       for (int i = 0; i < numargs; i++)
         args.add(process(node.getArguments().get(i), DefaultContext));
       PExpr call = CodeModel.factory.Call(baseExp, methodNameString, args);
-      call.setExtraInfo(inv.type);
+      call.setExtra(inv.type);
       return checkMobile(inv.type, call);
     } else {
       Tree[] args = new Tree[1 + node.getArguments().size()];
@@ -317,7 +317,7 @@ public class JavaToBatch implements
         JCVariableDecl decl = (JCVariableDecl) stmt;
         PExpr init = process(decl.getInitializer(), DefaultContext);
         PExpr let = CodeModel.factory.Let(decl.getName().toString(), init,
-            makeSeq(items)).setExtraInfo(decl);
+            makeSeq(items)).setExtra(decl);
         items = new java.util.ArrayList<PExpr>();
         items.add(let);
       } else {
@@ -430,7 +430,7 @@ public class JavaToBatch implements
   public PExpr visitIdentifier(IdentifierTree node, BatchTransformInfo info) {
     JCIdent id = (JCIdent) node;
     PExpr result = CodeModel.factory.Var(node.getName().toString());
-    result.setExtraInfo(id.sym);
+    result.setExtra(id.sym);
     return checkMobile(id.type, result);
   }
 
@@ -507,7 +507,7 @@ public class JavaToBatch implements
     //TODO!!     if (!(part instanceof CodeModel.Other))
     PExpr result = CodeModel.factory
         .Prop(part, node.getIdentifier().toString());
-    result.setExtraInfo(fld.type);
+    result.setExtra(fld.type);
     // HACK: The problem is that generic parameters do not have 
     // specific types.. and I can't figure out how to find them. Help!
     return checkMobile(/*HACK!*/fld.name.toString().equals("Key") ? syms.stringType : fld.type, result);
