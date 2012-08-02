@@ -1,0 +1,49 @@
+package car;
+
+import car.elements.Body;
+import car.elements.Engine;
+import car.elements.Wheel;
+
+public class CarElementPrintVisitor implements CarElementVisitor {
+    
+    public CarElementPrintVisitor() {
+        super();
+    }
+    int i = 0;
+    
+    public void visit(Wheel wheel) {
+        System.out.println(++i + ": Printing " + wheel.getName() + " wheel");
+    }
+    
+    public void visit(Engine engine) {
+        System.out.println(++i + ": Printing engine");
+    }
+    
+    public void visit(Body body) {
+        System.out.println(++i + ": Printing body");
+    }
+    
+    public void visit(Car car) {
+        System.out.println(++i + ": Printing car");
+    }
+    
+    public void visit$1003() {
+        System.out.println(++i + ": Printing engine");
+    }
+    
+    public void visit$1005() {
+        System.out.println(++i + ": Printing " + "front left" + " wheel");
+    }
+    
+    public void visit$1007() {
+        System.out.println(++i + ": Printing " + "front right" + " wheel");
+    }
+    
+    public void visit$1009() {
+        System.out.println(++i + ": Printing body");
+    }
+    
+    public void visit$1010() {
+        System.out.println(++i + ": Printing car");
+    }
+}

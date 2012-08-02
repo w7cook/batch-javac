@@ -1,0 +1,12 @@
+package benchmark.visitor;
+
+public class BinOp {
+    
+    public BinOp() {
+        super();
+    }
+    
+    int apply(int x, int y) {
+        return this.apply(x, y);
+    }
+}

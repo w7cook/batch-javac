@@ -1,0 +1,20 @@
+package benchmark.arith_int;
+
+public class Mul extends Binary {
+    
+    Mul(Exp l, Exp r) {
+        super(l, r);
+    }
+    
+    int eval(int[] env) {
+        return left.eval(env) * right.eval(env);
+    }
+    
+    static int eval$1005(int[] env) {
+        return benchmark.arith_int.Add.eval$1006(env) * benchmark.arith_int.Add.eval$1006(env);
+    }
+    
+    static int eval$1010(int[] env) {
+        return benchmark.arith_int.Constant.eval$1011(env) * benchmark.arith_int.Add.eval$1012(env);
+    }
+}

@@ -1,0 +1,22 @@
+package car.elements;
+
+import car.CarElementVisitor;
+
+public class Body implements CarElement {
+    
+    public Body() {
+        super();
+    }
+    
+    public void accept(CarElementVisitor visitor) {
+        visitor.visit(this);
+    }
+    
+    public static void accept$1008(car.CarElementVisitor visitor) {
+        visitor.visit$1009();
+    }
+    
+    public void accept$1012() {
+        car.CarElementDoVisitor.visit$1016(this);
+    }
+}

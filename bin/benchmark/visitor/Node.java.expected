@@ -1,0 +1,36 @@
+package benchmark.visitor;
+
+public class Node extends Tree {
+    Tree left;
+    Tree right;
+    
+    Node(Tree x, Tree y) {
+        super();
+        this.left = x;
+        this.right = y;
+    }
+    
+    int accept(TreeVisitor v) {
+        return v.visitNode(this);
+    }
+    
+    Tree getLeft() {
+        return left;
+    }
+    
+    Tree getRight() {
+        return right;
+    }
+    
+    int accept$1002() {
+        return benchmark.visitor.FoldBinOp.visitNode$1004(this);
+    }
+    
+    int accept$1007() {
+        return benchmark.visitor.FoldBinOp.visitNode$1009(this);
+    }
+    
+    int accept$1012() {
+        return benchmark.visitor.CountOcc.visitNode$1014(this);
+    }
+}

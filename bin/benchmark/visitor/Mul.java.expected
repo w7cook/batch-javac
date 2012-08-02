@@ -1,0 +1,16 @@
+package benchmark.visitor;
+
+public class Mul extends BinOp {
+    
+    public Mul() {
+        super();
+    }
+    
+    int apply(int x, int y) {
+        return x * y;
+    }
+    
+    static int apply$1010(int x, int y) {
+        return x * y;
+    }
+}

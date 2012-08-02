@@ -1,0 +1,16 @@
+package p1;
+
+public class Mult {
+    
+    public Mult() {
+        super();
+    }
+    
+    public static double mult(double x, double y) {
+        return x * y;
+    }
+    
+    public static double mult$1002(double x) {
+        return x * 5;
+    }
+}

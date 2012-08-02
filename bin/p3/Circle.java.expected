@@ -1,0 +1,41 @@
+package p3;
+
+import org.civet.Civet;
+import org.civet.Civet.Compile;
+
+public class Circle {
+    
+    public Circle() {
+        super();
+    }
+    int r = 0;
+    Point p = null;
+    
+    @Compile()
+    public static void main(String[] args) {
+        System.out.println("Circle(0; )");
+        System.out.println("Circle(0; (100.0, 200.0))");
+    }
+    
+    @Override()
+    public String toString() {
+        String pStr = "";
+        if (p != null) pStr = p.toString();
+        return "Circle(" + r + "; " + pStr + ")";
+    }
+}
+class Point {
+    final double x;
+    final double y;
+    
+    Point(double x, double y) {
+        super();
+        this.x = x;
+        this.y = y;
+    }
+    
+    @Override()
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+}

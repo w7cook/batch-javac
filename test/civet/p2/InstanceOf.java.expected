@@ -1,0 +1,40 @@
+package p2;
+
+import org.civet.Civet;
+import org.civet.Civet.Compile;
+
+public class InstanceOf {
+    
+    public InstanceOf() {
+        super();
+    }
+    
+    @Compile()
+    public static void main(String[] args) {
+        {
+            System.out.println("b\'s an A!");
+        }
+        Object c2 = new C();
+        if (c2 instanceof A) {
+            System.out.println("c2\'s an A!");
+        }
+    }
+}
+class A {
+    
+    A() {
+        super();
+    }
+}
+class B extends A {
+    
+    B() {
+        super();
+    }
+}
+class C {
+    
+    C() {
+        super();
+    }
+}

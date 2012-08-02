@@ -1,0 +1,26 @@
+package benchmark.visitor;
+
+public class CountOcc extends TreeVisitor {
+    int elm;
+    
+    CountOcc(int x) {
+        super();
+        this.elm = x;
+    }
+    
+    int visitLeaf(Leaf l) {
+        return this.elm == l.val ? 1 : 0;
+    }
+    
+    int visitNode(Node n) {
+        return n.getLeft().accept(this) + n.getRight().accept(this);
+    }
+    
+    static int visitLeaf$1013(benchmark.visitor.Leaf l) {
+        return 0 == l.val ? 1 : 0;
+    }
+    
+    static int visitNode$1014(benchmark.visitor.Node n) {
+        return n.getLeft().accept$1012() + n.getRight().accept$1012();
+    }
+}

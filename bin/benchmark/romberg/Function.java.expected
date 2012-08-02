@@ -1,0 +1,10 @@
+package benchmark.romberg;
+
+public abstract class Function {
+    
+    public Function() {
+        super();
+    }
+    
+    public abstract float apply(float x);
+}

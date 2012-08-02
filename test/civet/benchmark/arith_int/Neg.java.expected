@@ -1,0 +1,16 @@
+package benchmark.arith_int;
+
+class Neg extends Unary {
+    
+    Neg(Exp x) {
+        super(x);
+    }
+    
+    int eval(int[] env) {
+        return -getExp().eval(env);
+    }
+    
+    static int eval$1009(int[] env) {
+        return -benchmark.arith_int.Mul.eval$1010(env);
+    }
+}

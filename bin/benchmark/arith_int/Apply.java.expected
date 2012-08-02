@@ -1,0 +1,16 @@
+package benchmark.arith_int;
+
+public class Apply {
+    
+    public Apply() {
+        super();
+    }
+    
+    public static int a(Exp e, int[] env) {
+        return e.eval(env);
+    }
+    
+    public static int a$1003(int[] env) {
+        return benchmark.arith_int.Add.eval$1004(env);
+    }
+}

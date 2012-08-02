@@ -1,0 +1,34 @@
+package benchmark.visitor;
+
+public class FoldBinOp extends TreeVisitor {
+    BinOp op;
+    
+    FoldBinOp(BinOp x) {
+        super();
+        this.op = x;
+    }
+    
+    int visitLeaf(Leaf l) {
+        return l.val;
+    }
+    
+    int visitNode(Node n) {
+        return op.apply(n.getLeft().accept(this), n.getRight().accept(this));
+    }
+    
+    static int visitLeaf$1003(benchmark.visitor.Leaf l) {
+        return l.val;
+    }
+    
+    static int visitNode$1004(benchmark.visitor.Node n) {
+        return benchmark.visitor.Add.apply$1005(n.getLeft().accept$1002(), n.getRight().accept$1002());
+    }
+    
+    static int visitLeaf$1008(benchmark.visitor.Leaf l) {
+        return l.val;
+    }
+    
+    static int visitNode$1009(benchmark.visitor.Node n) {
+        return benchmark.visitor.Mul.apply$1010(n.getLeft().accept$1007(), n.getRight().accept$1007());
+    }
+}
