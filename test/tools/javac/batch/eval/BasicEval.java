@@ -66,7 +66,8 @@ public class BasicEval {
 	static void testBatch1(EvalService<BasicInterface> server) throws IOException {
 
 		for (BasicInterface s : server) {
-			out.println("test " + s.foo(3));
+		  int x = s.foo(3);
+			out.println("test " + x);
 		}
 		for (BasicInterface x : server) {
 			System.out.println(x.foo(x.foo(3)));

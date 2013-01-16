@@ -270,12 +270,16 @@ public class JCGenerator extends PartitionFactoryHelper<Generator> {
       }
 
       public JCStatement generateStmt() {
-        JCExpression items = call(make.Ident(in), "getIteration",
-            syms.batchMultiForestType, make.Literal(var));
+        Type iterableForest = new Type.ClassType(Type.noType, List.<Type> of(syms.batchForestReaderType),
+            syms.iterableType.tsym);
+ //       Type t = new Type.ClassType(Type.noType, List.<Type> of(syms.batchForestReaderType),
+ //           syms.iterableType.tsym);
+        JCExpression items = call(make.Ident(in), "getTable",
+            iterableForest, make.Literal(var));
         VarSymbol subresult = new VarSymbol(0, names.fromString(var),
-            syms.batchForestType, currentMethodSym);
+            syms.batchForestReaderType, currentMethodSym);
         JCVariableDecl decl = make.VarDef(subresult, null);
-        decl.setType(syms.batchForestType);
+        decl.setType(syms.batchForestReaderType);
         Symbol save;
         if (out == null) {
           save = in;
@@ -476,7 +480,7 @@ public class JCGenerator extends PartitionFactoryHelper<Generator> {
         for (Generator e : args)
           if (false // TODO!!! e.is(batch.syntax.Base.Kind.In)
           && (op == Op.AND || op == Op.OR)) {
-            preCond = batch.syntax.Factory.binary(factory, op, preCond, e);
+            preCond = batch.syntax.Parser.binary(factory, op, preCond, e);
           } else {
             result = e.generateRemote();
             a2 = a2.append(result);

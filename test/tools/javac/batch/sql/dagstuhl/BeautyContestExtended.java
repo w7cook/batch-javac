@@ -149,7 +149,7 @@ public class BeautyContestExtended extends BeautyContest {
 	public void sidesB(String charID) {
 		for (Dagstuhl db : connection) {
 			for (Section s : db.Sections) {
-				for (Paragraph p : s.Paragraphs.orderBy(Paragraph.byParagraphID, true)) {
+				for (Paragraph p : s.Paragraphs.orderBy(Paragraph.byParagraphID)) {
 					Paragraph prev = p.Play.Paragraphs.id(p.ParagraphID-1);
 					Paragraph next = p.Play.Paragraphs.id(p.ParagraphID+1);
 					if ((next.Character.CharID == charID) ||

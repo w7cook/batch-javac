@@ -4,7 +4,7 @@
  * you are consenting to be bound by the UTRL. See LICENSE.html for a 
  * full copy of the license.
  * 
- * Copyright © 2009, The University of Texas at Austin. All rights reserved.
+ * Copyright (c) 2009, The University of Texas at Austin. All rights reserved.
  * 
  * UNIVERSITY EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES CONCERNING THIS 
  * SOFTWARE AND DOCUMENTATION, INCLUDING ANY WARRANTIES OF MERCHANTABILITY, 
@@ -30,6 +30,7 @@ import batch.sql.Entity;
 import batch.sql.Id;
 import batch.sql.Inverse;
 import batch.sql.Many;
+import batch.IncludeInBatch;
 
 @Entity(name="Products")
 public class Product {
@@ -63,37 +64,37 @@ public class Product {
 	public void delete() {}
 	
 	public static Fun<Product, Boolean> isOutOfStock = new Fun<Product, Boolean>() {
-		public Boolean apply(Product p) {
+		@IncludeInBatch public Boolean apply(Product p) {
 			return p.UnitsInStock == 0;
 		}
 	};
 
 	public static Fun<Product, String> byCategoryName = new Fun<Product, String>() {
-		public String apply(Product p) {
+		@IncludeInBatch public String apply(Product p) {
 			return p.Category.CategoryName;
 		}
 	};
 
 	public static Fun<Product, Category> byCategory = new Fun<Product, Category>() {
-		public Category apply(Product p) {
+		@IncludeInBatch public Category apply(Product p) {
 			return p.Category;
 		}
 	};
 
 	public static Fun<Product, String> byName = new Fun<Product, String>() {
-		public String apply(Product p) {
+		@IncludeInBatch public String apply(Product p) {
 			return p.ProductName;
 		}
 	};
 
 	public static Fun<Product, Long> byUnitsInStock = new Fun<Product, Long>() {
-		public Long apply(Product p) {
+		@IncludeInBatch public Long apply(Product p) {
 			return p.UnitsInStock;
 		}
 	};
 
 	public static Fun<Product, Double> byUnitPrice = new Fun<Product, Double>() {
-		public Double apply(Product p) {
+		@IncludeInBatch public Double apply(Product p) {
 			return p.UnitPrice;
 		}
 	};

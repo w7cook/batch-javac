@@ -9,7 +9,6 @@ import batch.partition.PExpr;
 import batch.partition.Place;
 import batch.partition.Stage;
 
-import com.sun.tools.javac.code.Flags;
 import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Symbol.ClassSymbol;
 import com.sun.tools.javac.code.Symbol.MethodSymbol;
@@ -45,10 +44,7 @@ public class BatchLower extends Lower {
 
     Class<batch.IncludeInBatch> annoType = batch.IncludeInBatch.class;
     boolean batchMethod = (null != JavacElements.getAnnotation(decl.sym,
-        annoType))
-        || ((decl.mods.flags & Flags.SYNTHETIC) == 0
-            && decl.name.toString().equals("apply") && types.asSuper(
-            types.upperBound(currentClass.type), syms.batchFunType.tsym) != null);
+        annoType));
     if (!batchMethod) {
       super.visitMethodDefInternal(decl);
       return;
@@ -57,33 +53,33 @@ public class BatchLower extends Lower {
     JavaToBatch trans = new JavaToBatch(types, syms);
     DynamicCallInfo info = trans.getMethodInfo(decl.sym);
 
-    // <E> E <method>$getRemote(batch.util.Forest in, batch.Factory<E> f$, E <arg1>...) { 
-    //    <pre-local>
-    //    E e$ = <remote>
+    // <E> E <method$getRemote>(batch.util.ForestWriter s$, batch.Factory<E> f$, E <arg1>...) { 
+    //    <pre-local(out=s$)>
+    //    E e$ = <remote(factory=f$)>
     //    e$ = f$.Let("<param>", <param>, e$);
     //    ...
     //    return e$;
     //  }
-    //   <E> method$postLocal(batch.util.Forest receive) { 
-    //      <post-local>
+    //   <E> <method$postLocal>(batch.util.ForestReader r$) { 
+    //      <post-local(out=r$)>
     //   }
 
     CodeModel codeModel = new CodeModel();
     Environment env = new Environment(codeModel);
 
     VarSymbol send = new VarSymbol(0, names.fromString("s$"),
-        syms.batchForestType, decl.sym);
+        syms.batchForestWriterType, decl.sym);
     VarSymbol receive = new VarSymbol(0, names.fromString("r$"),
-        syms.batchForestType, decl.sym);
+        syms.batchForestReaderType, decl.sym);
     Name nE = names.fromString("E");
     TypeVar E = new TypeVar(nE, decl.sym, syms.objectType);
     E.bound = syms.objectType;
     VarSymbol e = new VarSymbol(0, names.fromString("e$"), E, decl.sym);
 
     // MAKE THE NEW PARAMETER LIST
-    //     (batch.util.Forest in, batch.Factory<E> f$, E <arg1>...)
+    //     (batch.util.ForestWriter in, batch.Factory<E> f$, E <arg1>...)
     List<JCVariableDecl> newParams = List.nil();
-    // batch.util.Forest s$;
+    // batch.util.ForestWriter s$;
     newParams = newParams.append(make.VarDef(send, null));
     // batch.BatchFactory<E> f$,
     Type factType = new Type.ClassType(Type.noType, List.<Type> of(E),
@@ -110,7 +106,8 @@ public class BatchLower extends Lower {
         new BatchTransformInfo(info.returns == Place.REMOTE));
 
     History h = exp.partition(Place.MOBILE, env);
-    System.out.println("----------------------------");
+    System.out.println("----METHOD: " + decl.sym + " ------------------------");
+    System.out.println(exp.toString());
     System.out.println(h.toString());
 
     JCGenerator gen = new JCGenerator(context, currentMethodSym, fact, E,
@@ -136,7 +133,7 @@ public class BatchLower extends Lower {
     JCExpression remote = s2.action().runExtra(gen).generateRemote();
     JCStatement cmd;
     cmd = make.VarDef(e, remote);
-    cmd.setType(syms.batchForestType);
+    cmd.setType(syms.batchForestReaderType);
     stats = stats.append(cmd);
 
     // make the Lets
@@ -156,16 +153,11 @@ public class BatchLower extends Lower {
     // TODO: have to bind the parameters with LETs
     // TODO: make sure there are not NAME CLASHES in the binding!!!!
 
-    // <E> E <method>$getRemote(batch.util.Forest in, batch.Factory<E> f$, E <arg1>...)
+    // <E> E <method>$getRemote(batch.util.ForestWriter in, batch.Factory<E> f$, E <arg1>...)
 
     //    Modifiers newMods = mods.fullCopy();
     //    if (!newMods.isStatic() && !hostType().isAnonymous())
     //      newMods.addModifier(new Modifier("static"));
-
-    //       protected JCMethodDecl(JCModifiers mods, Name name, JCExpression restype,
-    //           List<JCTypeParameter> typarams, List<JCVariableDecl> params,
-    //           List<JCExpression> thrown, JCBlock body, JCExpression defaultValue,
-    //           MethodSymbol sym) {
 
     List<Type> argtypes = List.nil();
     for (JCVariableDecl arg : newParams) {
@@ -192,13 +184,13 @@ public class BatchLower extends Lower {
     cld.sym.members_field.enter(method1.sym);
 
     // create the post-local, if there is one
-    //   <E> method$postLocal(batch.util.Forest receive) { 
+    //   <E> method$postLocal(batch.util.ForestReader receive) { 
     //      <post-local>
     //   }
     if (step < h.length() && h.get(step).place() == Place.LOCAL) {
       // has post local stage
       Stage s3 = h.get(step++);
-      // <type> <method>$postLocal(batch.util.Forest out) { 
+      // <type> <method>$postLocal(batch.util.ForestReader out) { 
       //    <post-local>
       // }
       gen.setInOut(receive, null);
@@ -207,7 +199,7 @@ public class BatchLower extends Lower {
 
       Name postLocal = names.fromString(decl.name.toString() + "$postLocal");
       MethodType postLocalType = new MethodType(
-          List.<Type> of(syms.batchForestType), decl.sym.getReturnType(),
+          List.<Type> of(syms.batchForestReaderType), decl.sym.getReturnType(),
           List.<Type> nil(), syms.methodClass);
 
       MethodSymbol postLocalSym = new MethodSymbol(PUBLIC, postLocal,
@@ -231,22 +223,26 @@ public class BatchLower extends Lower {
 
   // for (interface var : service) { block }
   //
+  // translates to...
+  //
   // batch.util.BatchExpressionFactory f$ = <exp>;
   // batch.util.Forest s$ = new batch.util.Forest();
-  // <prelocal>
-  // batch.util.Forest r = <var>.execute(<remote>, s);
-  // <postlocal>
+  // <prelocal(out=s$)>
+  // batch.util.ForestReader r$ = <service>.execute(<remote(factory=f$)>, s$);
+  // <postlocal(in=r$)>
   private void visitBatchBlock(JCEnhancedForLoop tree, Type batchType) {
     // protected Symtab syms = Symtab.instance(null);
 
     JavaToBatch trans = new JavaToBatch(types, syms);
     PExpr exp = tree.getStatement().accept(trans, JavaToBatch.DefaultContext);
-    // System.out.println(getStmt().dumpTree());
+
+    System.out.println("------BLOCK-----------------------");
+    System.out.println(exp.toString());
+
     Environment env = new Environment(CodeModel.factory);
     env = env.extend(tree.var.sym.toString(), tree.var.type, Place.REMOTE);
     History h = exp.partition(Place.MOBILE, env);
 
-    System.out.println("----------------------------");
     System.out.println(h.toString());
 
     // create the factory variable
@@ -258,7 +254,7 @@ public class BatchLower extends Lower {
     // batch.util.BatchExpressionFactory f$ = <var>.getFactory();
     // batch.util.Forest s$ = new batch.util.Forest();
     // <prelocal>
-    // batch.util.Forest r = <var>.execute(<remote>, s);
+    // batch.util.ForestReader r = <var>.execute(<remote>, s);
     // <postlocal>
 
     List<JCStatement> stats = List.nil();
@@ -268,7 +264,7 @@ public class BatchLower extends Lower {
     VarSymbol send = new VarSymbol(0, names.fromString("s$"),
         syms.batchForestType, currentMethodSym);
     VarSymbol receive = new VarSymbol(0, names.fromString("r$"),
-        syms.batchForestType, currentMethodSym);
+        syms.batchForestReaderType, currentMethodSym);
 
     Symbol ctor = lookupConstructor(tree.pos(), syms.batchForestType,
         List.<Type> nil());
@@ -308,11 +304,11 @@ public class BatchLower extends Lower {
 
         // TODO: HACK to get casts to work!
         JCExpression exec = gen.call(tree.getExpression(), "execute",
-            syms.batchForestType,
+            syms.batchForestReaderType,
             make.TypeCast(expressionType, remote.setType(syms.objectType)),
             make.Ident(send));
         cmd = make.VarDef(receive, exec);
-        cmd.setType(syms.batchForestType);
+        cmd.setType(syms.batchForestReaderType);
         stats = stats.append(cmd);
         step++;
       }

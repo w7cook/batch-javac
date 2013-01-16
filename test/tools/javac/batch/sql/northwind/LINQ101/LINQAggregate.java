@@ -13,11 +13,11 @@ import batch.sql.Many;
 import batch.util.MemSet;
 
 public class LINQAggregate extends BaseTest {
-	public static void main(String[] args) throws SQLException {
-		new LINQAggregate().run();
-	}
-	
-	/* Count - Simple
+  public static void main(String[] args) throws SQLException {
+    new LINQAggregate().run();
+  }
+
+  /* Count - Simple
   public void Linq73()
   {
       int[] factorsOf300 = { 2, 2, 3, 5, 5 };
@@ -27,16 +27,16 @@ public class LINQAggregate extends BaseTest {
       Console.WriteLine("There are {0} unique factors of 300.", uniqueFactors);
   }
   */
-	
-	public void Batch73() {
-	  print("***** Batch73");
+
+  public void Batch73() {
+    print("***** Batch73");
     Many<Integer> factorsOf300 = MemSet.make(2, 2, 3, 5, 5);
     int uniqueFactors = factorsOf300.distinct().count();
-	  print("There are {0} unique factors of 300.", uniqueFactors);
-	}
-	
-	/* Count - Conditional
-	public void Linq74()
+    print("There are {0} unique factors of 300.", uniqueFactors);
+  }
+
+  /* Count - Conditional
+  public void Linq74()
   {
       int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
   
@@ -44,62 +44,65 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("There are {0} odd numbers in the list.", oddNumbers);
   } 
-	*/
-	
-	public void Batch74() {
+  */
+  Fun<Integer, Boolean> oddF = new Fun<Integer, Boolean>() {
+    public Boolean apply(Integer i) {
+      return i % 2 == 0;
+    }
+  };
+
+  public void Batch74() {
     print("***** Batch74");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
-    Fun<Integer, Boolean> oddF = new Fun<Integer, Boolean>() {public Boolean apply(Integer i) {return i%2==0;}};
     int oddNumbers = numbers.count(oddF);
     print("There are {0} odd numbers in the list.", oddNumbers);
   }
-	
-	/* Count - Nested
 
-	private void Linq76() {
-	   List customers = GetCustomerList();
+  /* Count - Nested
 
-	   var orderCounts =
-	      from c in customers
-	      select new {c.CustomerID, OrderCount = c.Orders.Count()};
+  private void Linq76() {
+     List customers = GetCustomerList();
 
-	   ObjectDumper.Write(orderCounts);
-	}
-	*/
+     var orderCounts =
+        from c in customers
+        select new {c.CustomerID, OrderCount = c.Orders.Count()};
 
-	public void Batch76() {
-		print("***** Batch76");
-		for (Northwind db : connection)
-			for (Customer c : db.Customers)
-				print("CustomerID={0}\t OrderCount={1}", c.CustomerID, c.Orders.count());
-	}
+     ObjectDumper.Write(orderCounts);
+  }
+  */
 
-	/* Count - Grouped
-	
-	private void Linq77() {
-	   List products = GetProductList();
+  public void Batch76() {
+    print("***** Batch76");
+    for (Northwind db : connection)
+      for (Customer c : db.Customers)
+        print("CustomerID={0}\t OrderCount={1}", c.CustomerID, c.Orders.count());
+  }
 
-	   var categoryCounts =
-	      from p in products
-	      group p by p.Category into g
-	      select new {Category = g.Key, 
-	          ProductCount = g.Group.Count()};
+  /* Count - Grouped
+  
+  private void Linq77() {
+     List products = GetProductList();
 
-	   ObjectDumper.Write(categoryCounts);
-	}
-	*/
+     var categoryCounts =
+        from p in products
+        group p by p.Category into g
+        select new {Category = g.Key, 
+            ProductCount = g.Group.Count()};
 
-	public void Batch77() {
-		print("***** Batch77");
-		for (Northwind db : connection)
-			for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
-				print("Category={0}\t ProductCount={1}",
-						g.Key.CategoryName,
-						g.Items.count());
-	}
-	
-	/* Sum - Simple
-	 public void Linq78()
+     ObjectDumper.Write(categoryCounts);
+  }
+  */
+
+  public void Batch77() {
+    print("***** Batch77");
+    for (Northwind db : connection)
+      for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
+        print("Category={0}\t ProductCount={1}", g.Key.CategoryName,
+            g.Items.count());
+  }
+
+  /* Sum - Simple
+   public void Linq78()
   {
       int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
   
@@ -107,18 +110,17 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("The sum of the numbers is {0}.", numSum);
   }
-	*/
-	
-	public void Batch78() {
-	  print("***** Batch78");
-    Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
-    Fun<Integer, Long> sumID = new Fun<Integer, Long>() {public Long apply(Integer i) {return i.longValue();}};
-    long numSum = numbers.sum(sumID);
-    print("The sum of the numbers is {0}.", numSum);
-	}
+  */
 
-	/* Sum - Projection
-	public void Linq79()
+  public void Batch78() {
+    print("***** Batch78");
+    Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
+    long numSum = numbers.sum(longF);
+    print("The sum of the numbers is {0}.", numSum);
+  }
+
+  /* Sum - Projection
+  public void Linq79()
   {
       string[] words = { "cherry", "apple", "blueberry" };
   
@@ -126,20 +128,18 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("There are a total of {0} characters in these words.", totalChars);
   }
-	 */
-	
-	public void Batch79() {
-	  print("***** Batch79");
+   */
+
+  public void Batch79() {
+    print("***** Batch79");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
-    Fun<String, Integer> lengthF = new Fun<String, Integer>() {public Integer apply(String s) {return s.length();}};
-    Fun<Integer, Long> longF = new Fun<Integer, Long>() {public Long apply(Integer i) {return i.longValue();}};
     long totalChars = words.project(lengthF).sum(longF);
     print("There are a total of {0} characters in these words.", totalChars);
-	}
-	
-	/* Sum - Grouped
+  }
 
-	public void Linq80()
+  /* Sum - Grouped
+
+  public void Linq80()
   {
       List<Product> products = GetProductList();
   
@@ -150,19 +150,18 @@ public class LINQAggregate extends BaseTest {
   
       ObjectDumper.Write(categories);
   }
-	*/
+  */
 
-	public void Batch80() {
-		print("***** Batch80");
-		for (Northwind db : connection)
-			for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
-				print("Category={0}\t TotalUnitsInStock={1}",
-						g.Key.CategoryName,
-						g.Items.sum(Product.byUnitsInStock));
-	}
-	
-	/* Min - Simple
-	public void Linq81()
+  public void Batch80() {
+    print("***** Batch80");
+    for (Northwind db : connection)
+      for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
+        print("Category={0}\t TotalUnitsInStock={1}", g.Key.CategoryName,
+            g.Items.sum(Product.byUnitsInStock));
+  }
+
+  /* Min - Simple
+  public void Linq81()
   {
       int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
   
@@ -170,18 +169,17 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("The minimum number is {0}.", minNum);
   }
-	*/
-	
-	public void Batch81() {
+  */
+
+  public void Batch81() {
     print("***** Batch81");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
-    Fun<Integer, Long> longF = new Fun<Integer, Long>() {public Long apply(Integer i) {return i.longValue();}};
     long min = numbers.min(longF);
     print("The minimum number is {0}.", min);
   }
-	
-	/* Min - Projection
-	public void Linq82()
+
+  /* Min - Projection
+  public void Linq82()
   {
       string[] words = { "cherry", "apple", "blueberry" };
   
@@ -189,20 +187,18 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("The shortest word is {0} characters long.", shortestWord);
   }
-	*/
-	
-	public void Batch82() {
+  */
+
+  public void Batch82() {
     print("***** Batch82");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
-    Fun<String, Integer> lengthF = new Fun<String, Integer>() {public Integer apply(String s) {return s.length();}};
-    Fun<Integer, Long> longF = new Fun<Integer, Long>() {public Long apply(Integer i) {return i.longValue();}};
     long shortestWord = words.project(lengthF).min(longF);
     print("The shortest word is {0} characters long.", shortestWord);
   }
 
-	/* Min - Grouped
+  /* Min - Grouped
 
-	public void Linq83()
+  public void Linq83()
   {
       List<Product> products = GetProductList();
   
@@ -213,20 +209,19 @@ public class LINQAggregate extends BaseTest {
   
       ObjectDumper.Write(categories);
   }
-	*/
+  */
 
-	public void Batch83() {
-		print("***** Batch83");
-		for (Northwind db : connection)
-			for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
-				print("Category={0}\t CheapestPrice={1}",
-						g.Key.CategoryName,
-						g.Items.dmin(Product.byUnitPrice));
-	}
+  public void Batch83() {
+    print("***** Batch83");
+    for (Northwind db : connection)
+      for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
+        print("Category={0}\t CheapestPrice={1}", g.Key.CategoryName,
+            g.Items.dmin(Product.byUnitPrice));
+  }
 
-	/* Min - Elements
+  /* Min - Elements
 
-	public void Linq84()
+  public void Linq84()
   {
       List<Product> products = GetProductList();
   
@@ -238,25 +233,25 @@ public class LINQAggregate extends BaseTest {
   
       ObjectDumper.Write(categories, 1);
   }
-	*/
+  */
 
-	public void Batch84() {
-		print("***** Batch84");
-		for (Northwind db : connection)
-			for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory)) {
-				print("Category {0}", g.Key.CategoryName);
-				for (Product p : g.Items) {
-				  double minPrice = g.Items.dmin(Product.byUnitPrice);
-	        // TODO: BUG: Jaba generates an incorrect where clause: it matches
-				  //            only the minimum price of ALL products. 
-				  if (p.UnitPrice == minPrice)
-						print("  Cheapest Products includes: {0}", p.ProductName);
-				}
-			}
-	}
-	
-	/* Max - Simple
-	public void Linq85()
+  public void Batch84() {
+    print("***** Batch84");
+    for (Northwind db : connection)
+      for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory)) {
+        print("Category {0}", g.Key.CategoryName);
+        for (Product p : g.Items) {
+          double minPrice = g.Items.dmin(Product.byUnitPrice);
+          // TODO: BUG: Jaba generates an incorrect where clause: it matches
+          //            only the minimum price of ALL products. 
+          if (p.UnitPrice == minPrice)
+            print("  Cheapest Products includes: {0}", p.ProductName);
+        }
+      }
+  }
+
+  /* Max - Simple
+  public void Linq85()
   {
       int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
   
@@ -264,18 +259,22 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("The maximum number is {0}.", maxNum);
   }
-	*/
-	
-	public void Batch85() {
+  */
+  Fun<Integer, Long> longF = new Fun<Integer, Long>() {
+    public Long apply(Integer i) {
+      return i.longValue();
+    }
+  };
+
+  public void Batch85() {
     print("***** Batch85");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
-    Fun<Integer, Long> longF = new Fun<Integer, Long>() {public Long apply(Integer i) {return i.longValue();}};
     long max = numbers.max(longF);
     print("The maximum number is {0}.", max);
   }
-	
-	/* Max - Projection
-	public void Linq86()
+
+  /* Max - Projection
+  public void Linq86()
   {
       string[] words = { "cherry", "apple", "blueberry" };
   
@@ -283,20 +282,23 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("The longest word is {0} characters long.", longestLength);
   }
-	 */
-	
-	public void Batch86() {
+   */
+  Fun<String, Integer> lengthF = new Fun<String, Integer>() {
+    public Integer apply(String s) {
+      return s.length();
+    }
+  };
+
+  public void Batch86() {
     print("***** Batch86");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
-    Fun<String, Integer> lengthF = new Fun<String, Integer>() {public Integer apply(String s) {return s.length();}};
-    Fun<Integer, Long> longF = new Fun<Integer, Long>() {public Long apply(Integer i) {return i.longValue();}};
     long longestLength = words.project(lengthF).max(longF);
     print("The longest word is {0} characters long.", longestLength);
   }
 
-	/* Max - Grouped
+  /* Max - Grouped
 
-	public void Linq87()
+  public void Linq87()
   {
       List<Product> products = GetProductList();
   
@@ -307,20 +309,19 @@ public class LINQAggregate extends BaseTest {
   
       ObjectDumper.Write(categories);
   }
-	*/
+  */
 
-	public void Batch87() {
-		print("***** Batch87");
-		for (Northwind db : connection)
-			for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
-				print("Category={0} MostExpensivePrice={1}",
-						g.Key.CategoryName,
-						g.Items.dmax(Product.byUnitPrice));
-	}
+  public void Batch87() {
+    print("***** Batch87");
+    for (Northwind db : connection)
+      for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
+        print("Category={0} MostExpensivePrice={1}", g.Key.CategoryName,
+            g.Items.dmax(Product.byUnitPrice));
+  }
 
-	/* Max - Elements
+  /* Max - Elements
 
-	public void Linq88()
+  public void Linq88()
   {
       List<Product> products = GetProductList();
   
@@ -332,22 +333,21 @@ public class LINQAggregate extends BaseTest {
   
       ObjectDumper.Write(categories, 1);
   }
-	*/
+  */
 
-	public void Batch88() {
-		print("***** Batch88");
-		for (Northwind db : connection)
-			for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory)) {
-				print("Category {0}", g.Key.CategoryName);
-				double maxPrice = g.Items.dmax(Product.byUnitPrice);
-				for (Product p : g.Items)
-				  // TODO: BUG: Jaba generates an incorrect where clause: it matches
+  public void Batch88() {
+    print("***** Batch88");
+    for (Northwind db : connection)
+      for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory)) {
+        print("Category {0}", g.Key.CategoryName);
+        double maxPrice = g.Items.dmax(Product.byUnitPrice);
+        for (Product p : g.Items)
+          // TODO: BUG: Jaba generates an incorrect where clause: it matches
           //            only the minimum price of ALL products. 
           if (p.UnitPrice == maxPrice)
-						print("  Most Expensive Products includes: {0}", p.ProductName);
-			}
-	}
-	
+            print("  Most Expensive Products includes: {0}", p.ProductName);
+      }
+  }
 
   /* Average - Simple
   
@@ -360,15 +360,19 @@ public class LINQAggregate extends BaseTest {
       Console.WriteLine("The average number is {0}.", averageNum);
   }
   */
-  
+  Fun<Integer, Double> doubleF = new Fun<Integer, Double>() {
+    public Double apply(Integer i) {
+      return i.doubleValue();
+    }
+  };
+
   public void Batch89() {
     print("***** Batch89");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
-    Fun<Integer, Double> doubleF = new Fun<Integer, Double>() {public Double apply(Integer i) {return i.doubleValue();}};
     double avg = numbers.average(doubleF);
     print("The average number is {0}.", avg);
   }
-  
+
   /* Max - Projection
   public void Linq90()
   {
@@ -379,40 +383,37 @@ public class LINQAggregate extends BaseTest {
       Console.WriteLine("The average word length is {0} characters.", averageLength);
   }
   */
-  
+
   public void Batch90() {
     print("***** Batch90");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
-    Fun<String, Integer> lengthF = new Fun<String, Integer>() {public Integer apply(String s) {return s.length();}};
-    Fun<Integer, Double> doubleF = new Fun<Integer, Double>() {public Double apply(Integer i) {return i.doubleValue();}};
     double averageLength = words.project(lengthF).average(doubleF);
     print("The average word length is {0} characters.", averageLength);
   }
 
-	/* Average - Grouped
+  /* Average - Grouped
 
-	private void Linq91() {
-	   List products = GetProductList();
+  private void Linq91() {
+     List products = GetProductList();
 
-	   var categories =
-	      from p in products
-	      group p by p.Category into g
-	      select new {Category = g.Key, AveragePrice = g.Group.Average(p => p.UnitPrice)};
+     var categories =
+        from p in products
+        group p by p.Category into g
+        select new {Category = g.Key, AveragePrice = g.Group.Average(p => p.UnitPrice)};
 
-	   ObjectDumper.Write(categories);
-	}
-	*/
-	public void Batch91() {
+     ObjectDumper.Write(categories);
+  }
+  */
+  public void Batch91() {
     print("***** Batch91");
     for (Northwind db : connection)
-			for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
-				print("Category={0}\t AveragePrice={1}",
-						g.Key.CategoryName,
-						g.Items.average(Product.byUnitPrice));
-	}
-	
-	/* Aggregate - Simple
-	public void Linq92()
+      for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
+        print("Category={0}\t AveragePrice={1}", g.Key.CategoryName,
+            g.Items.average(Product.byUnitPrice));
+  }
+
+  /* Aggregate - Simple
+  public void Linq92()
   {
       double[] doubles = { 1.7, 2.3, 1.9, 4.1, 2.9 };
   
@@ -420,19 +421,19 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("Total product of all numbers: {0}", product);
   } 
-	*/
-	
-	public void Batch92() {
-	  print("***** Batch92");
-/*    Many<Double> doubles = MemSet.make(1.7, 2.3, 1.9, 4.1, 2.9);
+  */
+
+  public void Batch92() {
+    print("***** Batch92");
+    Many<Double> doubles = MemSet.make(1.7, 2.3, 1.9, 4.1, 2.9);
     double product = 1;
     for (double factor : doubles)
-    	product *= factor;
+      product *= factor;
     print("Total product of all numbers: {0}", product);
-*/	}
-	
-	/* Aggregate - Seed
-	public void Linq93()
+  }
+
+  /* Aggregate - Seed
+  public void Linq93()
   {
       double startBalance = 100.0;
   
@@ -445,41 +446,41 @@ public class LINQAggregate extends BaseTest {
   
       Console.WriteLine("Ending balance: {0}", endBalance);
   }
-	*/
-	
-	public void Batch93() {
+  */
+
+  public void Batch93() {
     print("***** Batch93");
-/*    int balance = 100;
-    Many<Integer> attemptedWithdrawals = MemSet.make(20, 10, 40, 50, 10, 70, 30);
+    int balance = 100;
+    Many<Integer> attemptedWithdrawals = MemSet
+        .make(20, 10, 40, 50, 10, 70, 30);
     for (int withdrawal : attemptedWithdrawals)
-    	if (withdrawal <= balance)
-    		balance -= withdrawal;
+      if (withdrawal <= balance)
+        balance -= withdrawal;
     print("Ending balance: {0}", balance);
-*/
-    }
-	
-	public void test() throws SQLException {
-	  Batch73();
-	  Batch74();
+  }
+
+  public void test() throws SQLException {
+    Batch73();
+    Batch74();
     // Linq has no sample 75
-		Batch76();
-		Batch77();
-	  Batch78();
-	  Batch79();
-		Batch80();
-	  Batch81();
-	  Batch82();
-		Batch83();
-		Batch84();
-	  Batch85();
-	  Batch86();
-		Batch87();
-		Batch88();
-	  Batch89();
-	  Batch90();
-		Batch91();
-	  Batch92();
-	  Batch93();
-	}
+    Batch76();
+    Batch77();
+    Batch78();
+    Batch79();
+    Batch80();
+    Batch81();
+    Batch82();
+    Batch83();
+    Batch84();
+    Batch85();
+    Batch86();
+    Batch87();
+    Batch88();
+    Batch89();
+    Batch90();
+    Batch91();
+    Batch92();
+    Batch93();
+  }
 
 }

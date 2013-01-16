@@ -37,7 +37,7 @@ public class LINQConversion extends BaseTest {
     Fun<Double, Double> idF = new Fun<Double, Double>() {public Double apply(Double d) {return d;}};
     int index = 0;
     print("Every other double from highest to lowest:");
-    for (Double d : doubles.orderBy(idF, false)) {
+    for (Double d : doubles.orderByDescending(idF)) {
       if (index%2 == 0)
         print("{0}", d);
       index = index + 1;
@@ -70,7 +70,7 @@ public class LINQConversion extends BaseTest {
 	  Many<String> words = MemSet.make("cherry", "apple", "blueberry");
 	  Fun<String, String> idF = new Fun<String, String>() {public String apply(String s) {return s;}};
     print("The sorted word list:");
-    for (String s : words.orderBy(idF, true))
+    for (String s : words.orderBy(idF))
       print("{0}", s);    
 	}
 	

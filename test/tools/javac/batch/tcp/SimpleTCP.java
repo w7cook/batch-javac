@@ -33,7 +33,6 @@ import batch.Service;
 import batch.json.JSONTransport;
 import batch.tcp.TCPClient;
 import batch.util.BatchTransport;
-import batch.xml.XMLTransport;
 import eval.BasicInterface;
 
 public class SimpleTCP {
@@ -45,8 +44,8 @@ public class SimpleTCP {
     int port = Integer.parseInt(argv[2]);
     if (format.equals("JSON"))
     	testTCP(server, port, new JSONTransport());
-    else if (format.equals("XML"))
-    	testTCP(server, port, new XMLTransport());
+//    else if (format.equals("XML"))
+//    	testTCP(server, port, new XMLTransport());
     else
     	System.out.println("Unknown format: " + format);
     

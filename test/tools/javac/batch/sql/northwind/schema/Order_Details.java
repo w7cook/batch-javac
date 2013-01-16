@@ -4,7 +4,7 @@
  * you are consenting to be bound by the UTRL. See LICENSE.html for a 
  * full copy of the license.
  * 
- * Copyright © 2009, The University of Texas at Austin. All rights reserved.
+ * Copyright (c) 2009, The University of Texas at Austin. All rights reserved.
  * 
  * UNIVERSITY EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES CONCERNING THIS 
  * SOFTWARE AND DOCUMENTATION, INCLUDING ANY WARRANTIES OF MERCHANTABILITY, 
@@ -27,6 +27,7 @@ package sql.northwind.schema;
 import batch.Fun;
 import batch.sql.Column;
 import batch.sql.Entity;
+import batch.IncludeInBatch;
 
 @Entity(name="`Order Details`")
 public class Order_Details {
@@ -39,7 +40,7 @@ public class Order_Details {
 	public float Discount;
 	
 	static public Fun<Order_Details, Double> ByTotal = new Fun<Order_Details, Double>() {
-	  public Double apply(Order_Details o) {
+	  @IncludeInBatch public Double apply(Order_Details o) {
 	    return (double) o.UnitPrice * o.Quantity;
 	  }
 	};

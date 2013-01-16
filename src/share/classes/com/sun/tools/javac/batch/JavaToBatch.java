@@ -510,6 +510,8 @@ public class JavaToBatch implements
     result.setExtra(fld.type);
     // HACK: The problem is that generic parameters do not have 
     // specific types.. and I can't figure out how to find them. Help!
+    if (fld.name.toString().equals("Key"))
+      System.out.println("(NOTE: small hack here needs to be fixed)");
     return checkMobile(/*HACK!*/fld.name.toString().equals("Key") ? syms.stringType : fld.type, result);
   }
 

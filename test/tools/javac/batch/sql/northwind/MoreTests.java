@@ -43,10 +43,11 @@ public class MoreTests extends BaseTest {
    //     p.Category = db.Categories.id(3);
         x = p.ProductID;
     }
+    System.out.println("answer is: " + x);
     
     for (Northwind db : connection) {
       for (Category c : db.Categories)
-        if (c.CategoryName == "Test") {
+        if (c.CategoryName == "Produce") {
           Product p = db.Products.create();
           p.ProductName = "Output the new name";
           p.UnitPrice = 23.23;
@@ -63,7 +64,7 @@ public class MoreTests extends BaseTest {
 		String nameCheck = null;
 		for (Northwind db : connection) {
 			for (Product product : db.Products)
-				if (product.Category == db.Categories.id(3))
+				if (product.Category.CategoryID == db.Categories.id(3).CategoryID)
 					print("product {0}", product.ProductName);
 		}
 		print("***Update products:");
@@ -116,7 +117,6 @@ public class MoreTests extends BaseTest {
 
 	public void Linq42b() {
 		print("***** Test42b");
-		/*
 		for (Northwind db : connection) {
 			for (Group<String, Product> g : db.Products
 					.groupBy(Product.byCategoryName)) {
@@ -125,7 +125,7 @@ public class MoreTests extends BaseTest {
 				for (Product p : g.Items)
 					print("  Product '{0}':", p.ProductName);
 			}
-		}*/
+		}
 	}
 
 	// The following example uses the Average operator to find those Products
@@ -165,7 +165,7 @@ public class MoreTests extends BaseTest {
 	public void Linq999B() {
 		print("***** Test999B");
 		for (Northwind db : connection) {
-			for (Product product : db.Products.orderBy(Product.byCategoryName, true))
+			for (Product product : db.Products.orderBy(Product.byCategoryName))
 				if (product.UnitPrice > product.Category.Products
 						.average(Product.byUnitPrice))
 					print("{0} {1}", product.Category.CategoryName, product.ProductName);
@@ -191,13 +191,13 @@ public class MoreTests extends BaseTest {
 
 
 	public void test() throws SQLException {
+    Test3();
 		extraInsert();
- 		Test3();
 		Update1();
-		Linq42b();
 		Linq999A();
 		Linq999B();
 		Linq999C();
+    Linq42b();
 	}
 
 }

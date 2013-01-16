@@ -11,6 +11,7 @@ import batch.Fun;
 import batch.sql.Group;
 import batch.sql.Many;
 import batch.util.MemSet;
+import java.util.Arrays;
 
 public class LINQGroup extends BaseTest {
 	public static void main(String[] args) throws SQLException {
@@ -185,7 +186,7 @@ public class LINQGroup extends BaseTest {
 	    }
 	}*/
 	
-	/*public void Batch44() {
+	public void Batch44() {
     print("***** Batch44");
     
     Many<String> anagrams = MemSet.make("from   ", " salt", " earn ", "  last   ", " near ", " form  ");
@@ -202,7 +203,7 @@ public class LINQGroup extends BaseTest {
       for (String s : g.Items)
         print("{0}", s);
     }
-  }*/
+  }
 	
 	/*GroupBy - Comparer, Mapped
 
@@ -241,7 +242,7 @@ public class LINQGroup extends BaseTest {
 	    }
 	} */
 	
-	/*public void Batch45() {
+	public void Batch45() {
     print("***** Batch45");
     
     Many<String> anagrams = MemSet.make("from   ", " salt", " earn ", "  last   ", " near ", " form  ");
@@ -258,14 +259,14 @@ public class LINQGroup extends BaseTest {
       for (String s : g.Items)
         print("{0}", s);
     }
-  }*/
+  }
 	
 	public void test() throws SQLException {
 	  Batch40();
 	  Batch41();
 	  Batch42();
 	  Batch43();
-	  /*Batch44();
-	  Batch45();*/
+	  Batch44();
+	  Batch45();
 	}
 }

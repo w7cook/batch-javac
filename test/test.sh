@@ -1,1 +1,0 @@
-java -classpath bin:lib/batches.jar tcp.TestServer JSON 9825

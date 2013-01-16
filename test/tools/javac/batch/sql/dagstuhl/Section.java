@@ -6,6 +6,7 @@ import batch.sql.Entity;
 import batch.sql.Id;
 import batch.sql.Inverse;
 import batch.sql.Many;
+import batch.IncludeInBatch;
 
 @Entity(name="sections")
 public class Section {
@@ -25,7 +26,7 @@ public class Section {
 	
 	static Fun<Section, Boolean> hasCharacter(final String CharID) {
 		return new Fun<Section, Boolean>() {
-			public Boolean apply(Section s) {
+			@IncludeInBatch public Boolean apply(Section s) {
 				return s.Chapters.exists(Chapter.hasCharacter(CharID));
 			}
 		};
@@ -33,7 +34,7 @@ public class Section {
 	
 	static Fun<Section, Boolean> hasActor(final String name) {
 		return new Fun<Section, Boolean>() {
-			public Boolean apply(Section s) {
+			@IncludeInBatch public Boolean apply(Section s) {
 				return s.Chapters.exists(Chapter.hasActor(name));
 			}
 		};

@@ -75,6 +75,9 @@ import com.sun.tools.javac.tree.JCTree.JCWhileLoop;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
 
+/* copies the sub-expressions in an Other node back
+ * into the original Java Compiler AST nodes.
+ */
 public class BatchToJava implements
     TreeVisitor<JCTree, java.util.List<Generator>> {
 

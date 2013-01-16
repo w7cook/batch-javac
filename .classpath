@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path="src/share/classes"/>
 	<classpathentry kind="src" path="test/civet"/>
+	<classpathentry kind="src" path="test/tools/javac/batch"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/batches.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/batch-java-runtime"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

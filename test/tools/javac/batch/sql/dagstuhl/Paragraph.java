@@ -4,6 +4,7 @@ import batch.Fun;
 import batch.sql.Column;
 import batch.sql.Entity;
 import batch.sql.Id;
+import batch.IncludeInBatch;
 
 @Entity(name = "paragraphs")
 public class Paragraph {
@@ -37,20 +38,20 @@ public class Paragraph {
 	 */
 
 	static Fun<Paragraph, Section> bySection = new Fun<Paragraph, Section>() {
-		public Section apply(Paragraph p) {
+		@IncludeInBatch public Section apply(Paragraph p) {
 			return p.Section;
 		}
 	};
 
 	static Fun<Paragraph, Integer> byParagraphID = new Fun<Paragraph, Integer>() {
-		public Integer apply(Paragraph p) {
+		@IncludeInBatch public Integer apply(Paragraph p) {
 			return p.ParagraphID;
 		}
 	};
 
 	static Fun<Paragraph, Boolean> isCharacter(final String CharID) {
 		return new Fun<Paragraph, Boolean>() {
-			public Boolean apply(Paragraph p) {
+			@IncludeInBatch public Boolean apply(Paragraph p) {
 				return p.Character.CharID == CharID;
 			}
 		};
@@ -59,7 +60,7 @@ public class Paragraph {
 	// for version 1
 	static Fun<Paragraph, Boolean> isActor(final String actorName) {
 		return new Fun<Paragraph, Boolean>() {
-			public Boolean apply(Paragraph p) {
+			@IncludeInBatch public Boolean apply(Paragraph p) {
 				return p.Character.Actor != null && p.Character.Actor.Name == actorName;
 			}
 		};
@@ -68,7 +69,7 @@ public class Paragraph {
 	// for version 2
 	static Fun<Paragraph, Boolean> hasActor(final String actorName) {
 		return new Fun<Paragraph, Boolean>() {
-			public Boolean apply(Paragraph p) {
+			@IncludeInBatch public Boolean apply(Paragraph p) {
 				return p.Character.Casting.exists(Casting.isActor(actorName));
 			}
 		};

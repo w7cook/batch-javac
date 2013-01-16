@@ -51,7 +51,7 @@ public class BeautyContest {
 	
 	public void sides(String charID) {
 		for (Dagstuhl db : connection) {
-			for (Paragraph p : db.Paragraphs.orderBy(Paragraph.byParagraphID, true)) {
+			for (Paragraph p : db.Paragraphs.orderBy(Paragraph.byParagraphID)) {
 				Paragraph prev = p.Play.Paragraphs.id(p.ParagraphID-1);
 				Paragraph next = p.Play.Paragraphs.id(p.ParagraphID+1);
 				if ((next.Character.CharID == charID && next.Section == p.Section) ||

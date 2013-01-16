@@ -4,7 +4,7 @@
  * you are consenting to be bound by the UTRL. See LICENSE.html for a 
  * full copy of the license.
  * 
- * Copyright © 2009, The University of Texas at Austin. All rights reserved.
+ * Copyright (c) 2009, The University of Texas at Austin. All rights reserved.
  * 
  * UNIVERSITY EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES CONCERNING THIS 
  * SOFTWARE AND DOCUMENTATION, INCLUDING ANY WARRANTIES OF MERCHANTABILITY, 

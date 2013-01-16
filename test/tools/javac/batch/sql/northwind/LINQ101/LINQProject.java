@@ -14,34 +14,34 @@ public class LINQProject extends BaseTest {
   public static void main(String[] args) throws SQLException {
     new LINQProject().run();
   }
-  
- /* Select - Simple 1
-  public void Linq6()
-  {
-      int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-  
-      var numsPlusOne =
-          from n in numbers
-          select n + 1;
-  
-      Console.WriteLine("Numbers + 1:");
-      foreach (var i in numsPlusOne)
-      {
-          Console.WriteLine(i);
-      }
-  }
-  */
-  
+
+  /* Select - Simple 1
+   public void Linq6()
+   {
+       int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+   
+       var numsPlusOne =
+           from n in numbers
+           select n + 1;
+   
+       Console.WriteLine("Numbers + 1:");
+       foreach (var i in numsPlusOne)
+       {
+           Console.WriteLine(i);
+       }
+   }
+   */
+
   public void Batch6() {
     print("***** Batch6");
-  
+
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-  
+
     print("Numbers + 1:");
     for (int i : numbers)
       print("{0}", i + 1);
   }
-  
+
   /* Select - Simple 2
    public void Linq7()
   {
@@ -58,7 +58,7 @@ public class LINQProject extends BaseTest {
       }
   }
   */
-  
+
   public void Batch7() {
     print("***** Batch7");
     print("Product Names:");
@@ -66,7 +66,7 @@ public class LINQProject extends BaseTest {
       for (Product p : db.Products)
         print("{0}", p.ProductName);
   }
-  
+
   /* Select - Transformation
    public void Linq8()
   {
@@ -84,18 +84,19 @@ public class LINQProject extends BaseTest {
       }
   }
    */
-  
+
   public void Batch8() {
     print("***** Batch8");
-  
+
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-    String[] strings = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
-  
+    String[] strings = { "zero", "one", "two", "three", "four", "five", "six",
+        "seven", "eight", "nine" };
+
     print("Number strings:");
     for (int n : numbers)
       print(strings[n]);
   }
- 
+
   /* Select - Anonymous Types 1 
    
   public void Linq9()
@@ -112,15 +113,15 @@ public class LINQProject extends BaseTest {
       }
   }
    */
-  
+
   public void Batch9() {
     print("***** Batch9");
-  
+
     String[] words = { "aPPLE", "BlUeBeRrY", "cHeRry" };
     for (String w : words)
       print("Uppercase: {0}, Lowercase: {1}", w.toUpperCase(), w.toLowerCase());
   }
-  
+
   /* Select - Anonymous Types 2
    
   public void Linq10()
@@ -138,17 +139,18 @@ public class LINQProject extends BaseTest {
       }
   }
    */
-  
+
   public void Batch10() {
     print("***** Batch10");
-  
+
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-    String[] strings = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
-  
+    String[] strings = { "zero", "one", "two", "three", "four", "five", "six",
+        "seven", "eight", "nine" };
+
     for (int n : numbers)
       print("The digit {0} is {1}.", strings[n], (n % 2 == 0) ? "even" : "odd");
   }
-  
+
   /* Select - Anonymous Types 3
   
    public void Linq11()
@@ -168,14 +170,14 @@ public class LINQProject extends BaseTest {
    */
   public void Batch11() {
     print("***** Batch11");
-  
+
     print("Product Info:");
     for (Northwind db : connection)
       for (Product p : db.Products)
         print("{0} is : the category {1} and costs {2} per unit.",
-              p.ProductName, p.Category.CategoryName, p.UnitPrice);
+            p.ProductName, p.Category.CategoryName, p.UnitPrice);
   }
-  
+
   /* Select - Indexed
      
   public void Linq12()
@@ -191,12 +193,12 @@ public class LINQProject extends BaseTest {
       }
   }
    */
-  
+
   public void Batch12() {
     print("***** Batch12");
-  
+
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-  
+
     print("Number: In-place?");
     int index = 0;
     for (int n : numbers) {
@@ -204,7 +206,7 @@ public class LINQProject extends BaseTest {
       index = index + 1;
     }
   }
-  
+
   /* Select - Filtered
    
    public void Linq13()
@@ -223,20 +225,21 @@ public class LINQProject extends BaseTest {
             Console.WriteLine(num);
         }
   }
-*/
-  
+  */
+
   public void Batch13() {
-    print("***** Batch13");  
-  
+    print("***** Batch13");
+
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-    String[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
-  
+    String[] digits = { "zero", "one", "two", "three", "four", "five", "six",
+        "seven", "eight", "nine" };
+
     print("Numbers < 5:");
     for (int n : numbers)
       if (n < 5)
         print(digits[n]);
   }
-  
+
   /* SelectMany - Compound from 1
    public void Linq14()
   {
@@ -257,20 +260,20 @@ public class LINQProject extends BaseTest {
   }
    
    */
-  
+
   public void Batch14() {
     print("***** Batch14");
-  
-    int[] numbersA = {0, 2, 4, 5, 6, 8, 9};
-    int[] numbersB = {1, 3, 5, 7, 8};
-  
+
+    int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
+    int[] numbersB = { 1, 3, 5, 7, 8 };
+
     print("Pairs where a < b:");
     for (int a : numbersA)
       for (int b : numbersB)
         if (a < b)
           print("{0} is less than {1}", a, b);
   }
-  
+
   /*
    * SelectMany - Compound from 2
    * 
@@ -288,11 +291,11 @@ public class LINQProject extends BaseTest {
         for (Order o : c.Orders) {
           double total = o.OrderDetails.dsum(Order_Details.ByTotal);
           if (total < 500)
-            print("Customer={0} Order={1} Total={2}", 
-                o.Customer.CustomerID, o.OrderID, total);
+            print("Customer={0} Order={1} Total={2}", o.Customer.CustomerID,
+                o.OrderID, total);
         }
   }
-  
+
   /*
    * SelectMany - Compound from 3
    * 
@@ -309,10 +312,10 @@ public class LINQProject extends BaseTest {
       for (Customer c : db.Customers)
         for (Order o : c.Orders)
           if (o.OrderDate.after(Date.valueOf("1998-01-01")))
-            print("Customer={0} Order={1} Date={2}", 
-                c.CustomerID, o.OrderID, o.OrderDate);
+            print("Customer={0} Order={1} Date={2}", c.CustomerID, o.OrderID,
+                o.OrderDate);
   }
-  
+
   /*
    * SelectMany - from Assignment [fixed]
    * 
@@ -330,11 +333,11 @@ public class LINQProject extends BaseTest {
         for (Order o : c.Orders) {
           double total = o.OrderDetails.dsum(Order_Details.ByTotal);
           if (total > 2000)
-            print("Customer={0} Order={1} Total={2}", 
-                c.CustomerID, o.OrderID, total);
+            print("Customer={0} Order={1} Total={2}", c.CustomerID, o.OrderID,
+                total);
         }
   }
-  
+
   /*
    * SelectMany - Multiple from
    * 
@@ -351,15 +354,15 @@ public class LINQProject extends BaseTest {
     print("***** Batch18");
     Date cutoffDate = Date.valueOf("1997-01-01");
     for (Northwind db : connection)
-     for (Customer c : db.Customers)
-      if (c.Region == "WA") {
-       print("Customer {0}:", c.CompanyName);
-       for (Order o : c.Orders)
-        if (o.OrderDate.after(cutoffDate))
-         print("  {0}", o.OrderDate);
-      }
+      for (Customer c : db.Customers)
+        if (c.Region == "WA") {
+          print("Customer {0}:", c.CompanyName);
+          for (Order o : c.Orders)
+            if (o.OrderDate.after(cutoffDate))
+              print("  {0}", o.OrderDate);
+        }
   }
-  
+
   /*
    * SelectMany - Indexed
    * 
@@ -381,9 +384,9 @@ public class LINQProject extends BaseTest {
           print("Customer #{0} has an order with OrderID {1}", index, o.OrderID);
       }
   }
-  
+
   /* done */
-  
+
   public void test() throws SQLException {
     Batch6();
     Batch7();

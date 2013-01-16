@@ -8,6 +8,7 @@ import sql.northwind.schema.Northwind;
 import sql.northwind.schema.Product;
 import batch.Fun;
 import batch.sql.Group;
+import batch.IncludeInBatch;
 
 public class DBPLExamples extends BaseTest {
 	public static void main(String[] args) throws SQLException {
@@ -95,6 +96,26 @@ public class DBPLExamples extends BaseTest {
 						p.ProductName, p.Category.CategoryName, p.UnitPrice);
 	}
 
+	/*
+	 for (Product p : db.Products) {
+	    if (p.InStock > 0) {
+        OUT("A", p.ProductName);
+        OUT("B", p.Category.CategoryName);
+        OUT("C", p.UnitPrice);
+        for (Order o : p.orders) {
+          OUT("D", o.date)
+        }
+      }
+    }
+
+   SELECT p.ProductName as A, p.Category.CategoryName as B, p.UnitPrice as C
+   WHERE  p.InStock > 0
+   FROM PRODUCTS p INNER JOIN CATEGORY c ON p.category = c.id
+   
+
+
+
+	 */
 	/* OrderBy - Simple 3
 
 		public void Linq30()
@@ -112,7 +133,7 @@ public class DBPLExamples extends BaseTest {
 	public void Batch30() {
 		print("***** Batch30");
 		for (Northwind db : connection)
-			for (Product p : db.Products.orderBy(Product.byName, true))
+			for (Product p : db.Products.orderBy(Product.byName))
 				print("Name={0} UnitPrice={1}", p.ProductName, p.UnitPrice);
 	}
 	
@@ -156,22 +177,21 @@ public class DBPLExamples extends BaseTest {
 	public void Batch80() {
 		print("***** Batch80");
 		Fun<Product, Category> byCategory = new Fun<Product, Category>() {
-			public Category apply(Product p) {
+			@IncludeInBatch public Category apply(Product p) {
 				return p.Category;
 			}
 		};
 		Fun<Product, Long> byUnitsInStock = new Fun<Product, Long>() {
-			public Long apply(Product p) {
+			@IncludeInBatch public Long apply(Product p) {
 				return p.UnitsInStock;
 			}
 		};
-		/*
+		
 		for (Northwind db : connection)
 			for (Group<Category, Product> g : db.Products.groupBy(byCategory))
 				print("Category={0}\t TotalUnitsInStock={1}",
 						g.Key.CategoryName,
 						g.Items.sum(byUnitsInStock));
-						*/
 	}
 	
 	/* BAW: Doesn't compile
@@ -202,7 +222,7 @@ public class DBPLExamples extends BaseTest {
 			Product p = db.Products.create();
 			p.ProductName = "New Widget";
 			p.UnitPrice = 23.23;
-			//p.Category = db.Categories.id(3);			// BAW: Causes a bug, if uncommented
+			//p.Category = db.Categories.id(3);			// TODO: Causes a bug, if uncommented
 			id = p.ProductID;
 		}
 		return id;

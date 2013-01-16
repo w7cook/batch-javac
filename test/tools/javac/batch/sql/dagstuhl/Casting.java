@@ -3,6 +3,7 @@ package sql.dagstuhl;
 import batch.Fun;
 import batch.sql.Column;
 import batch.sql.Entity;
+import batch.IncludeInBatch;
 
 @Entity(name="casting")
 public class Casting {
@@ -14,7 +15,7 @@ public class Casting {
 	
 	static Fun<Casting, Boolean> isActor(final String actorName) {
 		return new Fun<Casting, Boolean>() {
-			public Boolean apply(Casting c) {
+			@IncludeInBatch public Boolean apply(Casting c) {
 				return c.Actor.Name == actorName;
 			}
 		};

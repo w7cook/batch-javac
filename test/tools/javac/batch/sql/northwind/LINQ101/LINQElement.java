@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import sql.northwind.BaseTest;
 import sql.northwind.schema.Northwind;
 import sql.northwind.schema.Product;
+import batch.IncludeInBatch;
 
 public class LINQElement extends BaseTest {
 	public static void main(String[] args) throws SQLException {
@@ -83,7 +84,7 @@ public class LINQElement extends BaseTest {
     
     for (Northwind db : connection) {
       Fun<Product, Boolean> isProduct789 = new Fun<Product, Boolean>() {
-        public Boolean apply(Product p) {
+        @IncludeInBatch public Boolean apply(Product p) {
           return p.ProductID == 789;
         }
       };

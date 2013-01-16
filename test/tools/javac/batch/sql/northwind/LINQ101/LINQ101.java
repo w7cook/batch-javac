@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 import sql.northwind.BaseTest;
 import sql.northwind.CheckGroups;
+import sql.northwind.MoreTests;
 
 public class LINQ101 extends BaseTest {
 	public static void main(String[] args) throws SQLException {
@@ -20,7 +21,7 @@ public class LINQ101 extends BaseTest {
 		new LINQQuantifier().run();
 		new LINQAggregate().run();
 		new LINQtestSimple().run();
-		//new MoreTests().run();
+		new MoreTests().run();
 		new CheckGroups().run();
 	}
 

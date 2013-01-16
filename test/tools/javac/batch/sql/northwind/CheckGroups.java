@@ -38,7 +38,6 @@ public class CheckGroups extends BaseTest {
 
 	private void LinqA() {
 		print("****Group/For*****");
-		/*
 		for (Northwind db : connection) {
 			for (Group<Category, Product> g : db.Products
 					.groupBy(Product.byCategory)) {
@@ -46,23 +45,21 @@ public class CheckGroups extends BaseTest {
 				for (Product p : g.Items)
 					print("  Products: ProductName={0}", p.ProductName);
 			}
-		}*/
+		}
 	}
 
 	private void LinqB() {
 		print("****Group/Aggregate*****");
-		/*
 		for (Northwind db : connection) {
 			for (Group<Category, Product> g : db.Products
 					.groupBy(Product.byCategory)) {
 				print("Category={0} #{1}", g.Key.CategoryName, g.Items.count());
 			}
-		}*/
+		}
 	}
 
 	private void LinqC() {
 		print("****For/Group*****");
-		/*
 		for (Northwind db : connection) {
 			for (Category c : db.Categories) {
 				print("Category={0}", c.CategoryName);
@@ -70,12 +67,11 @@ public class CheckGroups extends BaseTest {
 						.groupBy(Product.isOutOfStock))
 					print(" {0} #{1}", p.Key, p.Items.count());
 			}
-		}*/
+		}
 	}
 
 	private void LinqD() {
 		print("****Group/Group*****");
-		/*
 		for (Northwind db : connection) {
 			for (Group<Category, Product> g : db.Products
 					.groupBy(Product.byCategory)) {
@@ -84,7 +80,7 @@ public class CheckGroups extends BaseTest {
 						.groupBy(Product.isOutOfStock))
 					print(" {0} #{1}", p.Key, p.Items.count());
 			}
-		}*/
+		}
 	}
 
 	public void test() throws SQLException {

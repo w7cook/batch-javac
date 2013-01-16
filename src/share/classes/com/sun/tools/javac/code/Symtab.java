@@ -168,9 +168,10 @@ public class Symtab {
   public final Type batchServiceType;
   public final Type batchFactoryType;
   public final Type batchForestType;
+  public final Type batchForestReaderType;
+  public final Type batchForestWriterType;
   public final Type batchOpType;
   public final Type batchFunType;
-  public final Type batchMultiForestType;
 
   /**
    * The symbol representing the length field of an array.
@@ -499,7 +500,8 @@ public class Symtab {
     batchServiceType = enterClass("batch.Service");
     batchFactoryType = enterClass("batch.util.BatchFactory");
     batchForestType = enterClass("batch.util.Forest");
-    batchMultiForestType = enterClass("batch.util.MultiForest");
+    batchForestReaderType = enterClass("batch.util.ForestReader");
+    batchForestWriterType = enterClass("batch.util.ForestWriter");
     batchOpType = enterClass("batch.Op");
     batchFunType = enterClass("batch.Fun");
     

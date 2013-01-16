@@ -4,7 +4,7 @@
  * you are consenting to be bound by the UTRL. See LICENSE.html for a 
  * full copy of the license.
  * 
- * Copyright © 2009, The University of Texas at Austin. All rights reserved.
+ * Copyright (c) 2009, The University of Texas at Austin. All rights reserved.
  * 
  * UNIVERSITY EXPRESSLY DISCLAIMS ANY AND ALL WARRANTIES CONCERNING THIS 
  * SOFTWARE AND DOCUMENTATION, INCLUDING ANY WARRANTIES OF MERCHANTABILITY, 
@@ -32,6 +32,7 @@ import batch.sql.Entity;
 import batch.sql.Id;
 import batch.sql.Inverse;
 import batch.sql.Many;
+import batch.IncludeInBatch;
 
 @Entity(name="Orders")
 public abstract class Order {
@@ -55,13 +56,13 @@ public abstract class Order {
 
 	public static Fun<Order, Long> Year = new Fun<Order, Long>() {
 		@SuppressWarnings("deprecation")
-		public Long apply(Order p) {
+		@IncludeInBatch public Long apply(Order p) {
 			return (long)p.OrderDate.getYear();
 		}
 	};
 	static Fun<Order, Long> Month = new Fun<Order, Long>() {
 		@SuppressWarnings("deprecation")
-		public Long apply(Order p) {
+		@IncludeInBatch public Long apply(Order p) {
 			return (long)p.OrderDate.getMonth();
 		}
 	};
