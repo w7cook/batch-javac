@@ -51,6 +51,7 @@ import com.sun.source.tree.VariableTree;
 import com.sun.source.tree.WhileLoopTree;
 import com.sun.source.tree.WildcardTree;
 import com.sun.tools.javac.tree.JCTree;
+import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.tree.JCTree.JCArrayAccess;
 import com.sun.tools.javac.tree.JCTree.JCAssert;
 import com.sun.tools.javac.tree.JCTree.JCBinary;
@@ -59,6 +60,8 @@ import com.sun.tools.javac.tree.JCTree.JCBreak;
 import com.sun.tools.javac.tree.JCTree.JCCase;
 import com.sun.tools.javac.tree.JCTree.JCCatch;
 import com.sun.tools.javac.tree.JCTree.JCExpression;
+import com.sun.tools.javac.tree.JCTree.JCExpressionStatement;
+import com.sun.tools.javac.tree.JCTree.JCForLoop;
 import com.sun.tools.javac.tree.JCTree.JCInstanceOf;
 import com.sun.tools.javac.tree.JCTree.JCLabeledStatement;
 import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
@@ -71,6 +74,7 @@ import com.sun.tools.javac.tree.JCTree.JCThrow;
 import com.sun.tools.javac.tree.JCTree.JCTry;
 import com.sun.tools.javac.tree.JCTree.JCTypeCast;
 import com.sun.tools.javac.tree.JCTree.JCUnary;
+import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
 import com.sun.tools.javac.tree.JCTree.JCWhileLoop;
 import com.sun.tools.javac.util.Context;
 import com.sun.tools.javac.util.List;
@@ -80,8 +84,10 @@ import com.sun.tools.javac.util.List;
  */
 public class BatchToJava implements
     TreeVisitor<JCTree, java.util.List<Generator>> {
+  Context context;
 
   public BatchToJava(Context context) {
+    this.context = context;
   }
 
   JCExpression exp(Generator g) {
@@ -124,7 +130,7 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitAssert(AssertTree node, java.util.List<Generator> info) {
-    JCAssert ass = (JCAssert)node;
+    JCAssert ass = (JCAssert) node;
     ass.cond = exp(info.get(0));
     ass.detail = exp(info.get(1));
     return ass;
@@ -157,7 +163,7 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitBreak(BreakTree node, java.util.List<Generator> info) {
-    JCBreak br = (JCBreak)node;
+    JCBreak br = (JCBreak) node;
     return br;
   }
 
@@ -190,7 +196,7 @@ public class BatchToJava implements
   @Override
   public JCTree visitDoWhileLoop(DoWhileLoopTree node,
       java.util.List<Generator> info) {
-    JCWhileLoop w = (JCWhileLoop)node;
+    JCWhileLoop w = (JCWhileLoop) node;
     w.cond = exp(info.get(0));
     w.body = stat(info.get(1));
     return w;
@@ -216,17 +222,24 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitForLoop(ForLoopTree node, java.util.List<Generator> info) {
-    throw new Error("MISSING");
-    /*    Tree[] args = new Tree[2 + node.getInitializer().size()
-            + node.getUpdate().size()];
-        int i = 0;
-        for (Tree x : node.getInitializer())
-          args[i++] = x;
-        args[i++] = node.getCondition();
-        for (Tree x : node.getUpdate())
-          args[i++] = x;
-        args[i++] = node.getStatement();
-        return other(node, args);*/
+    JCForLoop loop = (JCForLoop) node;
+    int i = 0;
+    List<JCStatement> init = List.nil();
+    for (Tree x : node.getInitializer()) {
+      JCStatement s = stat(info.get(i++));
+      init = init.append(s);
+    }
+//    loop.init = init;
+    loop.cond = exp(info.get(i++));
+    List<JCExpressionStatement> step = List.nil();
+    TreeMaker make = TreeMaker.instance(context);
+    for (Tree x : node.getUpdate()) {
+      JCExpression e = exp(info.get(i++));
+      step = step.append(make.Exec(e));
+    }
+ //   loop.step = step;
+    loop.body = stat(info.get(i++));
+    return loop;
   }
 
   @Override
@@ -248,7 +261,7 @@ public class BatchToJava implements
   @Override
   public JCTree visitArrayAccess(ArrayAccessTree node,
       java.util.List<Generator> info) {
-    JCArrayAccess aa = (JCArrayAccess)node;
+    JCArrayAccess aa = (JCArrayAccess) node;
     aa.indexed = exp(info.get(0));
     aa.index = exp(info.get(1));
     return aa;
@@ -257,7 +270,7 @@ public class BatchToJava implements
   @Override
   public JCTree visitLabeledStatement(LabeledStatementTree node,
       java.util.List<Generator> info) {
-    JCLabeledStatement ls = (JCLabeledStatement)node;
+    JCLabeledStatement ls = (JCLabeledStatement) node;
     ls.body = stat(info.get(0));
     return ls;
   }
@@ -298,7 +311,7 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitReturn(ReturnTree node, java.util.List<Generator> info) {
-    JCReturn r = (JCReturn)node;
+    JCReturn r = (JCReturn) node;
     r.expr = exp(info.get(0));
     return r;
   }
@@ -317,11 +330,11 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitSwitch(SwitchTree node, java.util.List<Generator> info) {
-    JCSwitch sw = (JCSwitch)node;
-    sw.selector = exp(info.get(0));    
+    JCSwitch sw = (JCSwitch) node;
+    sw.selector = exp(info.get(0));
     int i = 1;
     for (CaseTree x : node.getCases()) {
-      JCCase c = (JCCase)x;
+      JCCase c = (JCCase) x;
       c.pat = exp(info.get(i++));
       c.stats = List.of(stat(info.get(i++))); // NOTE: can wrap a block around some statements
     }
@@ -331,7 +344,7 @@ public class BatchToJava implements
   @Override
   public JCTree visitSynchronized(SynchronizedTree node,
       java.util.List<Generator> info) {
-    JCSynchronized s = (JCSynchronized)node;
+    JCSynchronized s = (JCSynchronized) node;
     s.lock = exp(info.get(0));
     s.body = block(info.get(1));
     return s;
@@ -339,7 +352,7 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitThrow(ThrowTree node, java.util.List<Generator> info) {
-    JCThrow s = (JCThrow)node;
+    JCThrow s = (JCThrow) node;
     s.expr = exp(info.get(0));
     return s;
   }
@@ -352,12 +365,12 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitTry(TryTree node, java.util.List<Generator> info) {
-    JCTry t = (JCTry)node;
+    JCTry t = (JCTry) node;
     t.body = block(info.get(0));
     t.finalizer = block(info.get(1));
     int i = 2;
     for (CatchTree x : node.getCatches()) {
-      JCCatch c = (JCCatch)x;
+      JCCatch c = (JCCatch) x;
       c.body = block(info.get(i++));
     }
     return t;
@@ -383,7 +396,7 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitTypeCast(TypeCastTree node, java.util.List<Generator> info) {
-    JCTypeCast tc = (JCTypeCast)node;
+    JCTypeCast tc = (JCTypeCast) node;
     tc.expr = exp(info.get(0));
     return tc;
   }
@@ -403,7 +416,7 @@ public class BatchToJava implements
   @Override
   public JCTree visitInstanceOf(InstanceOfTree node,
       java.util.List<Generator> info) {
-    JCInstanceOf inst = (JCInstanceOf)node;
+    JCInstanceOf inst = (JCInstanceOf) node;
     inst.expr = exp(info.get(0));
     return inst;
   }
@@ -417,13 +430,16 @@ public class BatchToJava implements
 
   @Override
   public JCTree visitVariable(VariableTree node, java.util.List<Generator> info) {
-    throw new Error("MISSING");
+    JCVariableDecl decl = (JCVariableDecl) node;
+    if (info.size() > 1)
+      decl.init = exp(info.get(1));
+    return decl;
   }
 
   @Override
   public JCTree visitWhileLoop(WhileLoopTree node,
       java.util.List<Generator> info) {
-    JCWhileLoop loop = (JCWhileLoop)node;
+    JCWhileLoop loop = (JCWhileLoop) node;
     loop.cond = exp(info.get(0));
     loop.body = stat(info.get(1));
     return loop;

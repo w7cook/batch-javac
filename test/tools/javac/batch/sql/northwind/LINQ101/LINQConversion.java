@@ -8,11 +8,11 @@ import batch.sql.Many;
 import batch.util.MemSet;
 
 public class LINQConversion extends BaseTest {
-	public static void main(String[] args) throws SQLException {
-		new LINQConversion().run();
-	}
-	
-	/* ToArray
+  public static void main(String[] args) throws SQLException {
+    new LINQConversion().run();
+  }
+
+  /* ToArray
   public void Linq54()
   {
       double[] doubles = { 1.7, 2.3, 1.9, 4.1, 2.9 };
@@ -30,23 +30,27 @@ public class LINQConversion extends BaseTest {
       }
   }
   */
-	
-	public void Batch54() {
-	  print("***** Batch54");
+
+  private void Batch54() {
+    print("***** Batch54");
     Many<Double> doubles = MemSet.make(1.7, 2.3, 1.9, 4.1, 2.9);
-    Fun<Double, Double> idF = new Fun<Double, Double>() {public Double apply(Double d) {return d;}};
+    Fun<Double, Double> idF = new Fun<Double, Double>() {
+      public Double apply(Double d) {
+        return d;
+      }
+    };
     int index = 0;
     print("Every other double from highest to lowest:");
     for (Double d : doubles.orderByDescending(idF)) {
-      if (index%2 == 0)
+      if (index % 2 == 0)
         print("{0}", d);
       index = index + 1;
     }
-	}
-	
-	/* ToList
-	 
-	public void Linq55()
+  }
+
+  /* ToList
+   
+  public void Linq55()
   {
       string[] words = { "cherry", "apple", "blueberry" };
   
@@ -62,19 +66,23 @@ public class LINQConversion extends BaseTest {
           Console.WriteLine(w);
       }
   }
-	 */
-	
-	public void Batch55() {
-	  print("***** Batch55");
-    
-	  Many<String> words = MemSet.make("cherry", "apple", "blueberry");
-	  Fun<String, String> idF = new Fun<String, String>() {public String apply(String s) {return s;}};
+   */
+
+  private void Batch55() {
+    print("***** Batch55");
+
+    Many<String> words = MemSet.make("cherry", "apple", "blueberry");
+    Fun<String, String> idF = new Fun<String, String>() {
+      public String apply(String s) {
+        return s;
+      }
+    };
     print("The sorted word list:");
     for (String s : words.orderBy(idF))
-      print("{0}", s);    
-	}
-	
-	/* OfType
+      print("{0}", s);
+  }
+
+  /* OfType
   
   public void Linq57()
   {
@@ -89,22 +97,22 @@ public class LINQConversion extends BaseTest {
       }
   }
    */
-  
-  public void Batch57() {
+
+  private void Batch57() {
     print("***** Batch57");
-    
-    Object[] objects = {null, 1.0, "two", 3, "four", 5, "six", 7.0};
-    
+
+    Object[] objects = { null, 1.0, "two", 3, "four", 5, "six", 7.0 };
+
     print("Numbers stored as doubles:");
     for (Object o : objects)
       if (o instanceof Double)
-        print("{0}", o);    
+        print("{0}", o);
   }
-	
-	public void test() throws SQLException {
-	  Batch54();
-	  Batch55();
-	  Batch57();
-	}
+
+  public void test() throws SQLException {
+    Batch54();
+    Batch55();
+    Batch57();
+  }
 
 }

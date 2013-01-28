@@ -29,7 +29,7 @@ public class LINQSet extends BaseTest {
       }
   }*/
 
-  public void Batch46() {
+  private void Batch46() {
     print("***** Batch46");
 
     Many<Integer> factorsOf300 = MemSet.make(2, 2, 3, 5, 5);
@@ -56,7 +56,7 @@ public class LINQSet extends BaseTest {
       }
   }*/
 
-  public void Batch47() {
+  private void Batch47() {
     print("***** Batch47");
 
     for (Northwind db : connection) {
@@ -82,7 +82,7 @@ public class LINQSet extends BaseTest {
       }
   }*/
 
-  public void Batch48() {
+  private void Batch48() {
     /*TODO: union not implemented
     print("***** Batch48");
 
@@ -117,7 +117,7 @@ public class LINQSet extends BaseTest {
           Console.WriteLine(ch);
       }
   }*/
-  public void Batch49() {
+  private void Batch49() {
     /*TODO: Union
       print("***** Batch48");
     
@@ -146,7 +146,7 @@ public class LINQSet extends BaseTest {
       }
   }*/
 
-  public void Batch50() {
+  private void Batch50() {
     print("***** Batch50");
 
     Many<Integer> numbersA = MemSet.make(0, 2, 4, 5, 6, 8, 9);
@@ -181,7 +181,7 @@ public class LINQSet extends BaseTest {
       }
   }*/
 
-  /*public void Batch51() {
+  /*private void Batch51() {
     print("***** Batch51");
     
     for (Northwind db : connection) {
@@ -249,8 +249,8 @@ public class LINQSet extends BaseTest {
   public void test() throws SQLException {
     Batch46();
     Batch47();
-    /*Batch48();
-    Batch49();*/
+    Batch48();
+    Batch49();
     Batch50();
   }
 }

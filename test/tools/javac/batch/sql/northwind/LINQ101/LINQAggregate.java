@@ -28,7 +28,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch73() {
+  private void Batch73() {
     print("***** Batch73");
     Many<Integer> factorsOf300 = MemSet.make(2, 2, 3, 5, 5);
     int uniqueFactors = factorsOf300.distinct().count();
@@ -51,11 +51,35 @@ public class LINQAggregate extends BaseTest {
     }
   };
 
-  public void Batch74() {
+  private void Batch74() {
     print("***** Batch74");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
     int oddNumbers = numbers.count(oddF);
     print("There are {0} odd numbers in the list.", oddNumbers);
+  }
+
+  /*
+   * Count - Indexed
+   * 
+   * private void Batch75() { int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+   * 
+   * int oddEvenMatches = numbers.Count((n, index) => n % 2 == index % 2);
+   * 
+   * Console.WriteLine("There are {0} numbers in the list whose odd/even status "
+   * + "matches that of their position.", oddEvenMatches); }
+   */
+
+  private void Batch75() {
+    int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+
+    int oddEvenMatches = 0;
+    int index = 0;
+    for (int n : numbers)
+      if (n % 2 == index++ % 2)
+        oddEvenMatches++;
+
+    print("There are {0} numbers in the list whose odd/even status "
+        + "matches that of their position.", oddEvenMatches);
   }
 
   /* Count - Nested
@@ -71,7 +95,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch76() {
+  private void Batch76() {
     print("***** Batch76");
     for (Northwind db : connection)
       for (Customer c : db.Customers)
@@ -93,7 +117,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch77() {
+  private void Batch77() {
     print("***** Batch77");
     for (Northwind db : connection)
       for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
@@ -112,7 +136,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch78() {
+  private void Batch78() {
     print("***** Batch78");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
     long numSum = numbers.sum(longF);
@@ -130,7 +154,7 @@ public class LINQAggregate extends BaseTest {
   }
    */
 
-  public void Batch79() {
+  private void Batch79() {
     print("***** Batch79");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
     long totalChars = words.project(lengthF).sum(longF);
@@ -152,7 +176,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch80() {
+  private void Batch80() {
     print("***** Batch80");
     for (Northwind db : connection)
       for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
@@ -171,7 +195,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch81() {
+  private void Batch81() {
     print("***** Batch81");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
     long min = numbers.min(longF);
@@ -189,7 +213,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch82() {
+  private void Batch82() {
     print("***** Batch82");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
     long shortestWord = words.project(lengthF).min(longF);
@@ -211,7 +235,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch83() {
+  private void Batch83() {
     print("***** Batch83");
     for (Northwind db : connection)
       for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
@@ -235,7 +259,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch84() {
+  private void Batch84() {
     print("***** Batch84");
     for (Northwind db : connection)
       for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory)) {
@@ -266,7 +290,7 @@ public class LINQAggregate extends BaseTest {
     }
   };
 
-  public void Batch85() {
+  private void Batch85() {
     print("***** Batch85");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
     long max = numbers.max(longF);
@@ -289,7 +313,7 @@ public class LINQAggregate extends BaseTest {
     }
   };
 
-  public void Batch86() {
+  private void Batch86() {
     print("***** Batch86");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
     long longestLength = words.project(lengthF).max(longF);
@@ -311,7 +335,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch87() {
+  private void Batch87() {
     print("***** Batch87");
     for (Northwind db : connection)
       for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
@@ -335,7 +359,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch88() {
+  private void Batch88() {
     print("***** Batch88");
     for (Northwind db : connection)
       for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory)) {
@@ -366,7 +390,7 @@ public class LINQAggregate extends BaseTest {
     }
   };
 
-  public void Batch89() {
+  private void Batch89() {
     print("***** Batch89");
     Many<Integer> numbers = MemSet.make(5, 4, 1, 3, 9, 8, 6, 7, 2, 0);
     double avg = numbers.average(doubleF);
@@ -384,7 +408,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch90() {
+  private void Batch90() {
     print("***** Batch90");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
     double averageLength = words.project(lengthF).average(doubleF);
@@ -404,7 +428,7 @@ public class LINQAggregate extends BaseTest {
      ObjectDumper.Write(categories);
   }
   */
-  public void Batch91() {
+  private void Batch91() {
     print("***** Batch91");
     for (Northwind db : connection)
       for (Group<Category, Product> g : db.Products.groupBy(Product.byCategory))
@@ -423,7 +447,7 @@ public class LINQAggregate extends BaseTest {
   } 
   */
 
-  public void Batch92() {
+  private void Batch92() {
     print("***** Batch92");
     Many<Double> doubles = MemSet.make(1.7, 2.3, 1.9, 4.1, 2.9);
     double product = 1;
@@ -448,7 +472,7 @@ public class LINQAggregate extends BaseTest {
   }
   */
 
-  public void Batch93() {
+  private void Batch93() {
     print("***** Batch93");
     int balance = 100;
     Many<Integer> attemptedWithdrawals = MemSet
@@ -462,7 +486,7 @@ public class LINQAggregate extends BaseTest {
   public void test() throws SQLException {
     Batch73();
     Batch74();
-    // Linq has no sample 75
+    Batch75();
     Batch76();
     Batch77();
     Batch78();

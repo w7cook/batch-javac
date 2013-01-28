@@ -27,7 +27,7 @@ public class LINQPartition extends BaseTest {
       }
     }
    */
-  public void Batch20() {
+  private void Batch20() {
     print("***** Batch20");
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
     for (int i = 0; i < 3; i++)
@@ -52,7 +52,7 @@ public class LINQPartition extends BaseTest {
       }
   }
   */
-  public void Batch21() {
+  private void Batch21() {
     print("***** Batch21");
     print("First 3 orders in WA:");
     for (Northwind db : connection)
@@ -75,7 +75,7 @@ public class LINQPartition extends BaseTest {
         }
     }
    */
-  public void Batch22() {
+  private void Batch22() {
     print("***** Batch22");
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
     print("All but first 4 numbers:");
@@ -102,7 +102,7 @@ public class LINQPartition extends BaseTest {
   }
   */
 
-  public void Batch23() {
+  private void Batch23() {
     print("***** Batch22");
     // Note: standard SQL does not support skipping rows at the beginning of a query
     int index = 0;
@@ -134,7 +134,7 @@ public class LINQPartition extends BaseTest {
       }
   }
   */
-  public void Batch24() {
+  private void Batch24() {
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
     print("***** Batch24");
     print("First numbers less than 6:");
@@ -160,7 +160,7 @@ public class LINQPartition extends BaseTest {
       }
   }
   */
-  public void Batch25() {
+  private void Batch25() {
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
     print("***** Batch25");
     print("First numbers not less than their position:");
@@ -186,7 +186,7 @@ public class LINQPartition extends BaseTest {
       }
   }
   */
-  public void Batch26() {
+  private void Batch26() {
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
     print("***** Batch26");
     print("All elements starting from first element divisible by 3:");
@@ -213,7 +213,7 @@ public class LINQPartition extends BaseTest {
       }
   }
   */
-  public void Batch27() {
+  private void Batch27() {
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
     print("***** Batch27");
     print("All elements starting from first element less than its position:");

@@ -75,6 +75,7 @@ import com.sun.tools.javac.tree.JCTree.JCIdent;
 import com.sun.tools.javac.tree.JCTree.JCMethodInvocation;
 import com.sun.tools.javac.tree.JCTree.JCUnary;
 import com.sun.tools.javac.tree.JCTree.JCVariableDecl;
+import com.sun.tools.javac.tree.JCTree.JCExpressionStatement;
 
 class BatchTransformInfo {
   boolean returnAsExpr;
@@ -421,7 +422,7 @@ public class JavaToBatch implements
       args[i++] = x;
     args[i++] = node.getCondition();
     for (Tree x : node.getUpdate())
-      args[i++] = x;
+      args[i++] = ((JCExpressionStatement)x).getExpression();
     args[i++] = node.getStatement();
     return other(node, args);
   }
@@ -609,10 +610,9 @@ public class JavaToBatch implements
   public PExpr visitUnary(UnaryTree node, BatchTransformInfo info) {
     JCUnary un = (JCUnary) node;
 
-    PExpr exp = getUnaryOp(un.getTag(), null);
+    PExpr exp = getUnaryOp(un.getTag(), process(node.getExpression(), DefaultContext));
     if (exp != null) {
-      PExpr result = getUnaryOp(un.getTag(), process(node.getExpression(), DefaultContext));
-      return checkMobile(un.type, result);
+      return checkMobile(un.type, exp);
     } else
       return other(node, node.getExpression());
   }
@@ -639,8 +639,15 @@ public class JavaToBatch implements
     return null;
   }
 
+  // should be variable declaration!
   @Override
   public PExpr visitVariable(VariableTree node, BatchTransformInfo info) {
+    JCVariableDecl decl = (JCVariableDecl)node;
+    if (decl.getInitializer() != null)
+      return other(node, decl.getInitializer());
+    else
+      return other(node);
+    /*
     if (info.baseExp != null) {
       //  if (isFieldAccess()) {
       PExpr part = process(info.baseExp, DefaultContext);
@@ -650,6 +657,7 @@ public class JavaToBatch implements
       //  return null; // super.toBatchSub(returnAsExpr);
     } else
       return CodeModel.factory.Var(node.getName().toString());
+      */
   }
 
   @Override
@@ -681,8 +689,12 @@ public class JavaToBatch implements
     java.util.List<PExpr> args = new java.util.ArrayList<PExpr>();
     for (Tree n : parts)
       args.add(process(n, DefaultContext));
-    Type type = ((JCTree) base).type;
-    return checkMobile(type, CodeModel.factory.Other(base, args));
+    PExpr result = CodeModel.factory.Other(base, args);
+    if (base instanceof JCExpression) { 
+      Type type = ((JCTree) base).type;
+      result = checkMobile(type, result);
+    }
+    return result;
   }
 
   @Override

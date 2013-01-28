@@ -32,7 +32,7 @@ public class LINQProject extends BaseTest {
    }
    */
 
-  public void Batch6() {
+  private void Batch6() {
     print("***** Batch6");
 
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
@@ -59,7 +59,7 @@ public class LINQProject extends BaseTest {
   }
   */
 
-  public void Batch7() {
+  private void Batch7() {
     print("***** Batch7");
     print("Product Names:");
     for (Northwind db : connection)
@@ -85,7 +85,7 @@ public class LINQProject extends BaseTest {
   }
    */
 
-  public void Batch8() {
+  private void Batch8() {
     print("***** Batch8");
 
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
@@ -114,7 +114,7 @@ public class LINQProject extends BaseTest {
   }
    */
 
-  public void Batch9() {
+  private void Batch9() {
     print("***** Batch9");
 
     String[] words = { "aPPLE", "BlUeBeRrY", "cHeRry" };
@@ -140,7 +140,7 @@ public class LINQProject extends BaseTest {
   }
    */
 
-  public void Batch10() {
+  private void Batch10() {
     print("***** Batch10");
 
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
@@ -168,7 +168,7 @@ public class LINQProject extends BaseTest {
         }
     }
    */
-  public void Batch11() {
+  private void Batch11() {
     print("***** Batch11");
 
     print("Product Info:");
@@ -194,7 +194,7 @@ public class LINQProject extends BaseTest {
   }
    */
 
-  public void Batch12() {
+  private void Batch12() {
     print("***** Batch12");
 
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
@@ -227,7 +227,7 @@ public class LINQProject extends BaseTest {
   }
   */
 
-  public void Batch13() {
+  private void Batch13() {
     print("***** Batch13");
 
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
@@ -261,7 +261,7 @@ public class LINQProject extends BaseTest {
    
    */
 
-  public void Batch14() {
+  private void Batch14() {
     print("***** Batch14");
 
     int[] numbersA = { 0, 2, 4, 5, 6, 8, 9 };
@@ -277,14 +277,14 @@ public class LINQProject extends BaseTest {
   /*
    * SelectMany - Compound from 2
    * 
-   * public void Batch15() { List<Customer> customers = GetCustomerList();
+   * public void Linq15() { List<Customer> customers = GetCustomerList();
    * 
    * var orders = from c in customers from o in c.Orders where o.Total < 500.00M
    * select new { c.CustomerID, o.OrderID, o.Total };
    * 
    * ObjectDumper.Write(orders); }
    */
-  public void Batch15() {
+  private void Batch15() {
     print("***** Batch15");
     for (Northwind db : connection)
       for (Customer c : db.Customers)
@@ -299,14 +299,14 @@ public class LINQProject extends BaseTest {
   /*
    * SelectMany - Compound from 3
    * 
-   * public void Batch16() { List<Customer> customers = GetCustomerList();
+   * public void Linq16() { List<Customer> customers = GetCustomerList();
    * 
    * var orders = from c in customers from o in c.Orders where o.OrderDate >= new
    * DateTime(1998, 1, 1) select new { c.CustomerID, o.OrderID, o.OrderDate };
    * 
    * ObjectDumper.Write(orders); }
    */
-  public void Batch16() {
+  private void Batch16() {
     print("***** Batch16");
     for (Northwind db : connection)
       for (Customer c : db.Customers)
@@ -319,14 +319,14 @@ public class LINQProject extends BaseTest {
   /*
    * SelectMany - from Assignment [fixed]
    * 
-   * public void Batch17() { List<Customer> customers = GetCustomerList();
+   * public void Linq17() { List<Customer> customers = GetCustomerList();
    * 
    * var orders = from c in customers from o in c.Orders from total = o.Total
    * where total >= 2000.0M select new { c.CustomerID, o.OrderID, total };
    * 
    * ObjectDumper.Write(orders); }
    */
-  public void Batch17() {
+  private void Batch17() {
     print("***** Batch17");
     for (Northwind db : connection)
       for (Customer c : db.Customers)
@@ -341,7 +341,7 @@ public class LINQProject extends BaseTest {
   /*
    * SelectMany - Multiple from
    * 
-   * public void Batch18() { List<Customer> customers = GetCustomerList();
+   * public void Linq18() { List<Customer> customers = GetCustomerList();
    * 
    * DateTime cutoffDate = new DateTime(1997, 1, 1);
    * 
@@ -350,7 +350,7 @@ public class LINQProject extends BaseTest {
    * 
    * ObjectDumper.Write(orders); }
    */
-  public void Batch18() {
+  private void Batch18() {
     print("***** Batch18");
     Date cutoffDate = Date.valueOf("1997-01-01");
     for (Northwind db : connection)
@@ -366,15 +366,16 @@ public class LINQProject extends BaseTest {
   /*
    * SelectMany - Indexed
    * 
-   * public void Batch19() { List<Customer> customers = GetCustomerList();
+   * public void Linq19() { List<Customer> customers = GetCustomerList();
    * 
    * var customerOrders = customers.SelectMany( (cust, custIndex) =>
    * cust.Orders.Select(o => "Customer #" + (custIndex + 1) +
    * " has an order with OrderID " + o.OrderID));
    * 
-   * ObjectDumper.Write(customerOrders); }
+   * ObjectDumper.Write(customerOrders); 
+   * }
    */
-  public void Batch19() {
+  private void Batch19() {
     print("***** Batch19");
     int index = 0;
     for (Northwind db : connection)

@@ -38,7 +38,7 @@ public class LINQOrdering extends BaseTest {
     }
   };
 
-  public void Batch28() {
+  private void Batch28() {
     print("***** Batch28");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
     print("The sorted list of words:");
@@ -72,7 +72,7 @@ public class LINQOrdering extends BaseTest {
     }
   };
 
-  public void Batch29() {
+  private void Batch29() {
     print("***** Batch29");
     Many<String> words = MemSet.make("cherry", "apple", "blueberry");
     print("The sorted list of words (by length):");
@@ -94,7 +94,7 @@ public class LINQOrdering extends BaseTest {
       ObjectDumper.Write(sortedProducts);
   }
   */
-  public void Batch30() {
+  private void Batch30() {
     print("***** Batch30");
     for (Northwind db : connection)
       for (Product p : db.Products.orderBy(Product.byName))
@@ -126,7 +126,7 @@ public class LINQOrdering extends BaseTest {
     }
   };
 
-  public void Batch31() {
+  private void Batch31() {
     print("***** Batch31");
     Many<String> words = MemSet.make("aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY",
         "ClOvEr", "cHeRry");
@@ -158,7 +158,7 @@ public class LINQOrdering extends BaseTest {
     }
   };
 
-  public void Batch32() {
+  private void Batch32() {
     print("***** Batch32");
     Many<Double> doubles = MemSet.make(1.7, 2.3, 1.9, 4.1, 2.9);
     print("The doubles from highest to lowest:");
@@ -180,7 +180,7 @@ public class LINQOrdering extends BaseTest {
       ObjectDumper.Write(sortedProducts);
   }
   */
-  public void Batch33() {
+  private void Batch33() {
     print("***** Batch33");
     for (Northwind db : connection)
       for (Product p : db.Products.orderByDescending(Product.byUnitsInStock))
@@ -206,7 +206,7 @@ public class LINQOrdering extends BaseTest {
   }
   */
 
-  public void Batch34() {
+  private void Batch34() {
     print("***** Batch34");
     Many<String> words = MemSet.make("aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY",
         "ClOvEr", "cHeRry");
@@ -231,7 +231,7 @@ public class LINQOrdering extends BaseTest {
        }
    }
   */
-  public void Batch35() {
+  private void Batch35() {
     print("***** Batch35");
     Many<String> digits = MemSet.make("zero", "one", "two", "three", "four",
         "five", "six", "seven", "eight", "nine");
@@ -261,7 +261,7 @@ public class LINQOrdering extends BaseTest {
        }
    }
   */
-  public void Batch36() {
+  private void Batch36() {
     print("***** Batch36");
     Many<String> words = MemSet.make("aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY",
         "ClOvEr", "cHeRry");
@@ -286,7 +286,7 @@ public class LINQOrdering extends BaseTest {
   }
   */
 
-  public void Batch37() {
+  private void Batch37() {
     print("***** Batch37");
     for (Northwind db : connection)
       for (Product p : db.Products.orderBy(Product.byCategoryName)
@@ -317,7 +317,7 @@ public class LINQOrdering extends BaseTest {
   
   I THINK THERE'S AN ERROR IN THE LINQ EXAMPLE OUTPUT ON THEIR WEB PAGE
   */
-  public void Batch38() {
+  private void Batch38() {
     print("***** Batch38");
     Many<String> words = MemSet.make("aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY",
         "ClOvEr", "cHeRry");
@@ -344,7 +344,7 @@ public class LINQOrdering extends BaseTest {
       }
   }
   */
-  public void Batch39() {
+  private void Batch39() {
     print("***** Batch38");
 
     String[] digits = { "zero", "one", "two", "three", "four", "five", "six",

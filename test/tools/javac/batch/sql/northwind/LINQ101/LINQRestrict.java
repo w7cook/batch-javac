@@ -33,32 +33,32 @@ import sql.northwind.schema.Order;
 import sql.northwind.schema.Product;
 
 public class LINQRestrict extends BaseTest {
-public static void main(String[] args) throws SQLException {
-  new LINQRestrict().run();
-}
-
- /* Where - Simple 1
- public void Linq1()
-  {
-      int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-  
-      var lowNums =
-          from n in numbers
-          where n < 5
-          select n;
-  
-      Console.WriteLine("Numbers < 5:");
-      foreach (var x in lowNums)
-      {
-          Console.WriteLine(x);
-      }
+  public static void main(String[] args) throws SQLException {
+    new LINQRestrict().run();
   }
- */
 
-  public void Batch1() {
+  /* Where - Simple 1
+  public void Linq1()
+   {
+       int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
+   
+       var lowNums =
+           from n in numbers
+           where n < 5
+           select n;
+   
+       Console.WriteLine("Numbers < 5:");
+       foreach (var x in lowNums)
+       {
+           Console.WriteLine(x);
+       }
+   }
+  */
+
+  private void Batch1() {
     print("***** Batch1");
     int[] numbers = { 5, 4, 1, 3, 9, 8, 6, 7, 2, 0 };
-    print ("Numbers < 5:");
+    print("Numbers < 5:");
     for (int n : numbers)
       if (n < 5)
         print("{0}", n);
@@ -82,8 +82,8 @@ public static void main(String[] args) throws SQLException {
       }
   }
   */
-  
-  public void Batch2() {
+
+  private void Batch2() {
     print("***** Batch2");
     for (Northwind db : connection) {
       print("Sold out products:");
@@ -110,8 +110,8 @@ public static void main(String[] args) throws SQLException {
       }
   }
   */
-  
-  public void Batch3() {
+
+  private void Batch3() {
     print("***** Batch3");
     print("In-stock products that cost more than 3.00:");
     for (Northwind db : connection)
@@ -119,7 +119,7 @@ public static void main(String[] args) throws SQLException {
         if (p.UnitsInStock > 0 && p.UnitPrice > 3.00)
           print("{0} is in stock and costs more than 3.00.", p.ProductName);
   }
-  
+
   /* Where - Drilldown
     
   public void Linq4()
@@ -143,7 +143,7 @@ public static void main(String[] args) throws SQLException {
   } 
   */
 
-  public void Batch4() {
+  private void Batch4() {
     print("***** Batch4");
     print("Customers from Washington and their orders:");
     for (Northwind db : connection)
@@ -154,7 +154,7 @@ public static void main(String[] args) throws SQLException {
             print(" Order {0}: {1}", order.OrderID, order.OrderDate);
         }
   }
-  
+
   /* Where - Indexed
   public void Linq5()
   {
@@ -169,10 +169,11 @@ public static void main(String[] args) throws SQLException {
       }
   }
   */
-  
-  public void Batch5() {
+
+  private void Batch5() {
     print("***** Batch5");
-    String[] digits = { "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine" };
+    String[] digits = { "zero", "one", "two", "three", "four", "five", "six",
+        "seven", "eight", "nine" };
 
     print("Short digits:");
     int index = 0;
