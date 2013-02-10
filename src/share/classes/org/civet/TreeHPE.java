@@ -110,7 +110,7 @@ public class TreeHPE extends TreeScanner<HPEResult, HPEContext> {
   @Override
   public HPEResult visitCompilationUnit(CompilationUnitTree node, HPEContext p) {
     JCCompilationUnit compilationUnit = (JCCompilationUnit) node;
-    ListBuffer<JCTree> l = new ListBuffer<>();
+    ListBuffer<JCTree> l = new ListBuffer<JCTree>();
     JCCompilationUnit newCompilationUnit = p.treeMaker.TopLevel(
         compilationUnit.packageAnnotations, compilationUnit.pid,
         List.<JCTree> nil());
