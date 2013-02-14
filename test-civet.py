@@ -29,12 +29,14 @@ def find(pattern, path):
 
 if __name__ == '__main__':
 
-  os.chdir(TESTDIR)  
+  os.chdir(TESTDIR)
   testfiles = find('TESTS', './')
   testcases = fileinput.input(testfiles);
   if os.path.exists(TESTOUTDIR):
     shutil.rmtree(TESTOUTDIR)
   os.makedirs(TESTOUTDIR)
+  if not os.path.exists("classes"):
+    os.makedirs("classes")
   
   totalCases = 0
   passedCases = 0
@@ -46,18 +48,19 @@ if __name__ == '__main__':
     targetDir = TESTOUTDIR+'/'+targetPackage+'/'
     print "Processing... "+sourceDir+testcase[0]+".java"
     p_cmd = [CIVET, 
-             '-cp', 
-             CIVET_HOME+'/bin',
-             '-sp', TESTDIR,
-             '-s', TESTOUTDIR,
-      sourceDir+testcase[0]+".java"]
+             '-cp', CIVET_HOME+'/bin',
+             '-d', 'classes',
+             '-sourcepath', TESTDIR,
+             '-outputsource', TESTOUTDIR,
+             sourceDir+testcase[0]+".java"]
+    print " ".join(p_cmd)
     subprocess.call(p_cmd)
 
     passed = True
     notMatched = ""
     for expected in testcase[1].split(','):
       diffCmd = subprocess.Popen(
-        ['diff', '-E', '-b', '-w', '-B', 
+        ['diff', '-E', '-b', '-w', '-B',
         sourceDir+expected+".java.expected", 
         targetDir+expected+".java"], 
         shell=False, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

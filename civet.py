@@ -18,9 +18,13 @@ if __name__ == '__main__':
       '-classpath', '-cp', 
       help='Specify where to find user class files and libraries')
   parser.add_argument(
-      '-srcpath', '-sp', help='Specify where to find user source files')
+      '-destination', '-d',
+      help='Where to put class files')
   parser.add_argument(
-      '-outsourcepath', '-s', 
+      '-sourcepath', '-sp',
+      help='Specify where to find user source files')
+  parser.add_argument(
+      '-outputsource', '-s',
       help='Specify where to place generated source files')
   parser.add_argument(
       'inputfile', default=sys.stdin,
@@ -30,11 +34,23 @@ if __name__ == '__main__':
   args = parser.parse_args()
 
   MAIN='com.sun.tools.javac.Main'
-  p_cmd = ['java', '-ea', 
-      '-classpath', args.classpath+':'+CIVET_HOME+'/dist/lib/classes.jar'+
-      ':'+CIVET_HOME+'/lib/batches.jar', 
-      MAIN, '-civet', 
-      '-cp', args.srcpath+':'+CIVET_HOME+'/dist/lib/classes.jar',
-      '-s', args.outsourcepath, args.inputfile]
+  p_cmd = ['java', '-ea',
+             '-classpath', CIVET_HOME+'/dist/lib/classes.jar'+':'+CIVET_HOME+'/lib/batches.jar',
+             MAIN,
+             '-cp', args.sourcepath+":"+CIVET_HOME+'/dist/lib/classes.jar',
+             '-d', args.destination,
+             '-sourcepath', args.sourcepath,
+             args.inputfile]
+  subprocess.call(p_cmd)
+
+  p_cmd = ['java', '-ea',
+           '-classpath', args.destination+':'+CIVET_HOME+'/dist/lib/classes.jar'+':'+CIVET_HOME+'/lib/batches.jar',
+           MAIN,
+           '-civet',
+           '-cp', args.sourcepath+":"+CIVET_HOME+'/dist/lib/classes.jar',
+           '-d', args.destination,
+           '-s', args.outputsource,
+           '-sourcepath', args.sourcepath,
+           args.inputfile]
   subprocess.call(p_cmd)
 
