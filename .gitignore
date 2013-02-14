@@ -1,5 +1,6 @@
 build/
 dist/
 bin/
+civet-test-output/
 nbproject/private/
 build/ant-diagnostics.log
