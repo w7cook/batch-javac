@@ -7,7 +7,7 @@ import subprocess
 import shutil
 import os,sys
 
-CIVET_HOME = os.path.dirname(__file__)
+CIVET_HOME = os.path.abspath(os.path.dirname(__file__))
 
 if __name__ == '__main__':
   # create the parser
@@ -32,7 +32,6 @@ if __name__ == '__main__':
 
   # parse the command line  
   args = parser.parse_args()
-
   MAIN='com.sun.tools.javac.Main'
   p_cmd = ['java', '-ea',
              '-classpath', CIVET_HOME+'/dist/lib/classes.jar'+':'+CIVET_HOME+'/lib/batches.jar',
