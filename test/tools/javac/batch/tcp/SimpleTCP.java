@@ -60,18 +60,19 @@ public class SimpleTCP {
 		for (BasicInterface remote : service) {
 			System.out.println("got remote value: " + remote.foo(3));
 		}
-
+		System.out.println("Calling twice...");
 		for (BasicInterface x : service) {
 			System.out.println(x.foo(x.foo(3)));
 		}
+    System.out.println("Getting horse...");
 		for (BasicInterface a : service) {
 			byte[] buffer = a.getImage("horse");
-			FileOutputStream fos = new FileOutputStream("test/images/outputTest.jpg");
+			FileOutputStream fos = new FileOutputStream("outputTest.jpg");
 			fos.write(buffer);
 			fos.close();
 		}
-		
-		listFiles(service);
+    System.out.println("Searching files...");
+		//listFiles(service);
 		
 	}
 
@@ -82,7 +83,7 @@ public class SimpleTCP {
       for (java.io.File file : dir.listFiles())
         if (file.length() > 1000) {
           System.out.println(file.getPath());
-        }
+        } 
     }
   }
 
