@@ -230,6 +230,7 @@ public class BatchLower extends Lower {
   // <prelocal(out=s$)>
   // batch.util.ForestReader r$ = <service>.execute(<remote(factory=f$)>, s$);
   // <postlocal(in=r$)>
+  // r$.complete()
   private void visitBatchBlock(JCEnhancedForLoop tree, Type batchType) {
     // protected Symtab syms = Symtab.instance(null);
 
@@ -321,6 +322,11 @@ public class BatchLower extends Lower {
         }
       }
     }
+    stats = stats.append(make.Exec(gen.call(
+      make.Ident(receive),
+      "complete",
+      syms.voidType
+    )));
 
     JCBlock block = make.Block(0, stats);
     block.endpos = TreeInfo.endPos(tree.body);

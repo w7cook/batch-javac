@@ -294,7 +294,20 @@ public class JCGenerator extends PartitionFactoryHelper<Generator> {
         } else {
           out = save;
         }
-        return make.ForeachLoop(decl, items, sub);
+        return make.ForeachLoop(
+          decl,
+          items,
+          make.Block(
+            0,
+            List.<JCStatement>nil()
+              .append(sub)
+              .append(make.Exec(call(
+                make.Ident(subresult),
+                "complete",
+                syms.voidType
+              )))
+          )
+        );
       }
 
       public JCExpression generateRemote() {
