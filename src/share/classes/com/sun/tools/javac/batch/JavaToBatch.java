@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import batch.Op;
 import batch.partition.CodeModel;
+import batch.partition.DynamicCallInfo;
 import batch.partition.PExpr;
 import batch.partition.Place;
 
@@ -198,7 +199,7 @@ public class JavaToBatch implements
         args.add(process(node.getArguments().get(i), DefaultContext));
       PExpr call = CodeModel.factory.DynamicCall(baseExp != null ? baseExp
           : CodeModel.factory.Other(null), methodNameString, args);
-      call.setExtra(getMethodInfo(methSym));
+      call.setExtra(DynamicCallInfo.TYPE_INFO_KEY, getMethodInfo(methSym));
 
       return checkMobile(inv.type, call);
     } else if (baseExp != null) {
@@ -206,7 +207,7 @@ public class JavaToBatch implements
       for (int i = 0; i < numargs; i++)
         args.add(process(node.getArguments().get(i), DefaultContext));
       PExpr call = CodeModel.factory.Call(baseExp, methodNameString, args);
-      call.setExtra(inv.type);
+      call.setExtra(DynamicCallInfo.TYPE_INFO_KEY, inv.type);
       return checkMobile(inv.type, call);
     } else {
       Tree[] args = new Tree[1 + node.getArguments().size()];
@@ -318,7 +319,7 @@ public class JavaToBatch implements
         JCVariableDecl decl = (JCVariableDecl) stmt;
         PExpr init = process(decl.getInitializer(), DefaultContext);
         PExpr let = CodeModel.factory.Let(decl.getName().toString(), init,
-            makeSeq(items)).setExtra(decl);
+            makeSeq(items)).setExtra(DynamicCallInfo.TYPE_INFO_KEY, decl);
         items = new java.util.ArrayList<PExpr>();
         items.add(let);
       } else {
@@ -431,7 +432,7 @@ public class JavaToBatch implements
   public PExpr visitIdentifier(IdentifierTree node, BatchTransformInfo info) {
     JCIdent id = (JCIdent) node;
     PExpr result = CodeModel.factory.Var(node.getName().toString());
-    result.setExtra(id.sym);
+    result.setExtra(DynamicCallInfo.TYPE_INFO_KEY, id.sym);
     return checkMobile(id.type, result);
   }
 
@@ -508,7 +509,7 @@ public class JavaToBatch implements
     //TODO!!     if (!(part instanceof CodeModel.Other))
     PExpr result = CodeModel.factory
         .Prop(part, node.getIdentifier().toString());
-    result.setExtra(fld.type);
+    result.setExtra(DynamicCallInfo.TYPE_INFO_KEY, fld.type);
     // HACK: The problem is that generic parameters do not have 
     // specific types.. and I can't figure out how to find them. Help!
     if (fld.name.toString().equals("Key"))

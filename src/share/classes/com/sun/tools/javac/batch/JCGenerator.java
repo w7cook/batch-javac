@@ -710,8 +710,8 @@ public class JCGenerator extends PartitionFactoryHelper<Generator> {
   }
 
   @Override
-  public Generator setExtra(Generator exp, Object info) {
-    return exp.setExtra(info);
+  public Generator setExtra(Generator exp, Object extraKey, Object extraInfo) {
+    return exp.setExtra(extraKey, extraInfo);
   }
 
 }
