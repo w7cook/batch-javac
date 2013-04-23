@@ -92,7 +92,10 @@ public class BatchLower extends Lower {
     int i = 0;
     for (JCVariableDecl p : decl.getParameters()) {
       Place place = info.arguments.get(i++);
-      env = env.extend(p.name.toString(), p.type, place);
+      env = env.extend(
+        p.name.toString(),
+        CodeModel.makeExtra(DynamicCallInfo.TYPE_INFO_KEY, p.type),
+        place);
       if (place == Place.REMOTE) {
         VarSymbol varWithTypeE = new Symbol.VarSymbol(0, p.name, E, decl.sym); // TODO: owner should be method we haven't created yet
         newParams = newParams.append(make.VarDef(varWithTypeE, null));
@@ -241,7 +244,10 @@ public class BatchLower extends Lower {
     System.out.println(exp.toString());
 
     Environment env = new Environment(CodeModel.factory);
-    env = env.extend(tree.var.sym.toString(), tree.var.type, Place.REMOTE);
+    env = env.extend(
+      tree.var.sym.toString(),
+      CodeModel.makeExtra(DynamicCallInfo.TYPE_INFO_KEY, tree.var.type),
+      Place.REMOTE);
     History h = exp.partition(Place.MOBILE, env);
 
     System.out.println(h.toString());

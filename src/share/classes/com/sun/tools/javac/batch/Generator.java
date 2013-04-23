@@ -24,6 +24,7 @@
  ******************************************************************************/
 package com.sun.tools.javac.batch;
 
+import batch.partition.DynamicCallInfo;
 import batch.partition.ExtraInfo;
 
 import com.sun.tools.javac.tree.JCTree.JCExpression;
@@ -32,8 +33,10 @@ import com.sun.tools.javac.tree.JCTree.JCStatement;
 public abstract class Generator implements ExtraInfo<Generator> {
   Object extraInfo;
 
-  public Generator setExtra(Object info) {
-    extraInfo = info;
+  public Generator setExtra(Object extraKey, Object extraInfo) {
+    if (extraKey == DynamicCallInfo.TYPE_INFO_KEY) {
+      this.extraInfo = extraInfo;
+    }
     return this;
   }
 
